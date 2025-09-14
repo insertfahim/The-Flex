@@ -125,73 +125,74 @@ export async function GET(request: Request) {
                 },
             });
 
-            // If we have substantial data, use it
-            if (totalReviews > 0 && avgRatingResult._avg.overallRating) {
-                // Get revenue data from property stats
-                const currentMonth = now.toISOString().slice(0, 7); // YYYY-MM format
-                const lastMonth = new Date(
-                    now.getFullYear(),
-                    now.getMonth() - 1,
-                    1
-                )
-                    .toISOString()
-                    .slice(0, 7);
+            // Always use real database data when available
+            console.log("Database stats:", {
+                totalReviews,
+                pendingReviews,
+                approvedReviews,
+                rejectedReviews,
+            });
 
-                const [currentMonthStats, lastMonthStats] = await Promise.all([
-                    prisma.propertyStats.aggregate({
-                        _sum: { revenue: true },
-                        _avg: { occupancy: true },
-                        where: { month: currentMonth },
-                    }),
-                    prisma.propertyStats.aggregate({
-                        _sum: { revenue: true },
-                        _avg: { occupancy: true },
-                        where: { month: lastMonth },
-                    }),
-                ]);
+            // Get revenue data from property stats
+            const currentMonth = now.toISOString().slice(0, 7); // YYYY-MM format
+            const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+                .toISOString()
+                .slice(0, 7);
 
-                // Calculate changes
-                const currentRevenue = currentMonthStats._sum.revenue || 0;
-                const lastRevenue = lastMonthStats._sum.revenue || 1;
-                const revenueChange =
-                    ((currentRevenue - lastRevenue) / lastRevenue) * 100;
+            const [currentMonthStats, lastMonthStats] = await Promise.all([
+                prisma.propertyStats.aggregate({
+                    _sum: { revenue: true },
+                    _avg: { occupancy: true },
+                    where: { month: currentMonth },
+                }),
+                prisma.propertyStats.aggregate({
+                    _sum: { revenue: true },
+                    _avg: { occupancy: true },
+                    where: { month: lastMonth },
+                }),
+            ]);
 
-                const currentOccupancy = currentMonthStats._avg.occupancy || 0;
-                const lastOccupancy = lastMonthStats._avg.occupancy || 1;
-                const occupancyChange = currentOccupancy - lastOccupancy;
+            // Calculate changes
+            const currentRevenue = currentMonthStats._sum.revenue || 0;
+            const lastRevenue = lastMonthStats._sum.revenue || 1;
+            const revenueChange =
+                ((currentRevenue - lastRevenue) / lastRevenue) * 100;
 
-                // Mock some additional stats that would come from other systems
-                const responseRate = 96;
-                const responseChange = 4.2;
+            const currentOccupancy = currentMonthStats._avg.occupancy || 0;
+            const lastOccupancy = lastMonthStats._avg.occupancy || 1;
+            const occupancyChange = currentOccupancy - lastOccupancy;
 
-                const stats = {
-                    totalRevenue: Math.floor(currentRevenue / 100), // Convert from pence to pounds
-                    revenueChange: Number(revenueChange.toFixed(1)),
-                    totalProperties,
-                    propertiesChange: 3.2, // Mock - would calculate from property creation dates
-                    totalReviews: recentReviews,
-                    reviewsChange: 8.7, // Mock - would calculate from previous period
-                    averageRating: Number(
-                        (avgRatingResult._avg.overallRating || 0).toFixed(1)
-                    ),
-                    ratingChange: 0.3, // Mock - would calculate from previous period
-                    occupancyRate: Number(currentOccupancy.toFixed(1)),
-                    occupancyChange: Number(occupancyChange.toFixed(1)),
-                    responseRate,
-                    responseChange,
-                    pendingReviews,
-                    approvedReviews,
-                    rejectedReviews,
-                    totalReviewsAllTime: totalReviews,
-                };
+            // Mock some additional stats that would come from other systems
+            const responseRate = 96;
+            const responseChange = 4.2;
 
-                return NextResponse.json({
-                    success: true,
-                    data: stats,
-                    timeRange,
-                    dataSource: "database",
-                });
-            }
+            const stats = {
+                totalRevenue: Math.floor(currentRevenue / 100), // Convert from pence to pounds
+                revenueChange: Number(revenueChange.toFixed(1)),
+                totalProperties,
+                propertiesChange: 3.2, // Mock - would calculate from property creation dates
+                totalReviews: recentReviews,
+                reviewsChange: 8.7, // Mock - would calculate from previous period
+                averageRating: Number(
+                    (avgRatingResult._avg.overallRating || 0).toFixed(1)
+                ),
+                ratingChange: 0.3, // Mock - would calculate from previous period
+                occupancyRate: Number(currentOccupancy.toFixed(1)),
+                occupancyChange: Number(occupancyChange.toFixed(1)),
+                responseRate,
+                responseChange,
+                pendingReviews,
+                approvedReviews,
+                rejectedReviews,
+                totalReviewsAllTime: totalReviews,
+            };
+
+            return NextResponse.json({
+                success: true,
+                data: stats,
+                timeRange,
+                dataSource: "database",
+            });
         } catch (dbError) {
             console.warn("Database query failed, using demo data:", dbError);
         }

@@ -1,12 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { FlexHeader } from "@/components/flex-header";
 import { FlexFooter } from "@/components/flex-footer";
+import { PropertyPerformance } from "@/components/property-performance";
+import { DashboardInsights } from "@/components/dashboard-insights";
+import { ReviewManagementWidget } from "@/components/review-management-widget";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     Select,
     SelectContent,
@@ -21,125 +23,106 @@ import {
     Users,
     Star,
     DollarSign,
-    Eye,
     MessageSquare,
-    Calendar,
-    Filter,
-    Search,
     Bell,
-    Settings,
     Download,
-    Plus,
     BarChart3,
-    PieChart,
-    MapPin,
-    Clock,
-    CheckCircle,
-    AlertCircle,
-    XCircle,
     ArrowUpRight,
     ArrowDownRight,
-    MoreVertical,
-    Edit,
-    Trash2,
-    ExternalLink,
+    RefreshCw,
+    AlertTriangle,
+    Plus,
+    Calendar,
+    Clock,
 } from "lucide-react";
-import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import type { NormalizedReview } from "@/types/review";
 
 export default function ManagerDashboard() {
     const [timeRange, setTimeRange] = useState("30d");
-    const [filterStatus, setFilterStatus] = useState("all");
-    const [searchQuery, setSearchQuery] = useState("");
+    const [activeTab, setActiveTab] = useState("overview");
+    const [reviews, setReviews] = useState<NormalizedReview[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
-    // Sample data - in real app this would come from API
+    // Fetch reviews data
+    useEffect(() => {
+        fetchReviews();
+    }, []);
+
+    const fetchReviews = async () => {
+        try {
+            setRefreshing(true);
+            const response = await fetch("/api/reviews");
+            const data = await response.json();
+            if (data.success) {
+                setReviews(data.data);
+            }
+        } catch (error) {
+            console.error("Error fetching reviews:", error);
+        } finally {
+            setLoading(false);
+            setRefreshing(false);
+        }
+    };
+
+    // Handle review approval
+    const handleReviewApproval = async (
+        reviewId: number,
+        approved: boolean,
+        managerNotes?: string
+    ) => {
+        try {
+            const response = await fetch(`/api/reviews/${reviewId}/approve`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ approved, managerNotes }),
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                // Update local state
+                setReviews((prev) =>
+                    prev.map((review) =>
+                        review.id === reviewId
+                            ? { ...review, isApproved: approved, managerNotes }
+                            : review
+                    )
+                );
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error("Error approving review:", error);
+            return false;
+        }
+    };
+
+    // Calculate dashboard stats from reviews
     const dashboardStats = {
         totalRevenue: 245680,
         revenueChange: 12.5,
         totalProperties: 47,
         propertiesChange: 3.2,
-        totalReviews: 1284,
+        totalReviews: reviews.length,
         reviewsChange: 8.7,
-        averageRating: 4.8,
+        averageRating:
+            reviews.length > 0
+                ? reviews.reduce((sum, r) => sum + r.overallRating, 0) /
+                  reviews.length
+                : 0,
         ratingChange: 0.3,
         occupancyRate: 92,
         occupancyChange: -2.1,
         responseRate: 96,
         responseChange: 4.2,
+        pendingReviews: reviews.filter(
+            (r) => !r.isApproved && r.status === "published"
+        ).length,
+        approvedReviews: reviews.filter((r) => r.isApproved).length,
     };
-
-    const recentProperties = [
-        {
-            id: 1,
-            name: "Modern Loft in Shoreditch",
-            location: "London, UK",
-            status: "Active",
-            rating: 4.9,
-            reviews: 127,
-            revenue: "£4,200",
-            occupancy: 95,
-            image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=300&h=200&fit=crop",
-        },
-        {
-            id: 2,
-            name: "Cozy Studio in Montmartre",
-            location: "Paris, France",
-            status: "Active",
-            rating: 4.7,
-            reviews: 89,
-            revenue: "€3,800",
-            occupancy: 88,
-            image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=300&h=200&fit=crop",
-        },
-        {
-            id: 3,
-            name: "Luxury Apartment Downtown",
-            location: "Algiers, Algeria",
-            status: "Maintenance",
-            rating: 4.6,
-            reviews: 56,
-            revenue: "DA 85,000",
-            occupancy: 0,
-            image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=300&h=200&fit=crop",
-        },
-    ];
-
-    const recentReviews = [
-        {
-            id: 1,
-            guest: "Sarah Johnson",
-            property: "Modern Loft in Shoreditch",
-            rating: 5,
-            comment:
-                "Absolutely fantastic stay! The property was immaculate and the location perfect.",
-            date: "2 hours ago",
-            status: "approved",
-            avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face",
-        },
-        {
-            id: 2,
-            guest: "Michael Chen",
-            property: "Cozy Studio in Montmartre",
-            rating: 4,
-            comment:
-                "Great location and clean apartment. Would definitely stay again!",
-            date: "5 hours ago",
-            status: "pending",
-            avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-        },
-        {
-            id: 3,
-            guest: "Emma Wilson",
-            property: "Luxury Apartment Downtown",
-            rating: 5,
-            comment:
-                "The host was incredibly responsive and the apartment exceeded expectations.",
-            date: "1 day ago",
-            status: "approved",
-            avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-        },
-    ];
 
     const quickActions = [
         { icon: Plus, label: "Add Property", color: "bg-blue-500", href: "#" },
@@ -162,6 +145,23 @@ export default function ManagerDashboard() {
             href: "/dashboard/analytics",
         },
     ];
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50">
+                <FlexHeader />
+                <div className="flex items-center justify-center min-h-[60vh]">
+                    <div className="flex items-center gap-2">
+                        <RefreshCw className="h-6 w-6 animate-spin text-[#284E4C]" />
+                        <span className="text-gray-600">
+                            Loading dashboard...
+                        </span>
+                    </div>
+                </div>
+                <FlexFooter />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -190,9 +190,18 @@ export default function ManagerDashboard() {
                                     <div className="flex items-center gap-2">
                                         <Bell className="h-4 w-4" />
                                         <span className="text-sm">
-                                            3 new notifications
+                                            {dashboardStats.pendingReviews}{" "}
+                                            pending reviews
                                         </span>
                                     </div>
+                                    {dashboardStats.pendingReviews > 10 && (
+                                        <div className="flex items-center gap-2">
+                                            <AlertTriangle className="h-4 w-4 text-yellow-400" />
+                                            <span className="text-sm text-yellow-200">
+                                                High volume
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="mt-6 lg:mt-0 flex gap-3">
@@ -218,6 +227,18 @@ export default function ManagerDashboard() {
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
+                                <Button
+                                    className="bg-white/10 hover:bg-white/20 border-white/20"
+                                    onClick={fetchReviews}
+                                    disabled={refreshing}
+                                >
+                                    <RefreshCw
+                                        className={`h-4 w-4 mr-2 ${
+                                            refreshing ? "animate-spin" : ""
+                                        }`}
+                                    />
+                                    Refresh
+                                </Button>
                                 <Button className="bg-white/10 hover:bg-white/20 border-white/20">
                                     <Download className="h-4 w-4 mr-2" />
                                     Export
@@ -227,583 +248,342 @@ export default function ManagerDashboard() {
                     </div>
                 </div>
 
-                {/* Key Metrics */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-                        <Card className="bg-white shadow-lg border-0">
-                            <CardContent className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="p-2 bg-green-100 rounded-lg">
-                                        <DollarSign className="h-6 w-6 text-green-600" />
-                                    </div>
-                                    <div
-                                        className={`flex items-center gap-1 text-sm ${
-                                            dashboardStats.revenueChange > 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                        }`}
-                                    >
-                                        {dashboardStats.revenueChange > 0 ? (
-                                            <ArrowUpRight className="h-4 w-4" />
-                                        ) : (
-                                            <ArrowDownRight className="h-4 w-4" />
-                                        )}
-                                        {Math.abs(dashboardStats.revenueChange)}
-                                        %
-                                    </div>
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    £
-                                    {dashboardStats.totalRevenue.toLocaleString()}
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    Total Revenue
-                                </p>
-                            </CardContent>
-                        </Card>
+                {/* Main Dashboard Content */}
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Tabs
+                        value={activeTab}
+                        onValueChange={setActiveTab}
+                        className="space-y-6"
+                    >
+                        <TabsList className="grid w-full grid-cols-4 bg-white shadow-sm">
+                            <TabsTrigger value="overview">Overview</TabsTrigger>
+                            <TabsTrigger value="properties">
+                                Properties
+                            </TabsTrigger>
+                            <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                            <TabsTrigger value="insights">Insights</TabsTrigger>
+                        </TabsList>
 
-                        <Card className="bg-white shadow-lg border-0">
-                            <CardContent className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="p-2 bg-blue-100 rounded-lg">
-                                        <Home className="h-6 w-6 text-blue-600" />
-                                    </div>
-                                    <div
-                                        className={`flex items-center gap-1 text-sm ${
-                                            dashboardStats.propertiesChange > 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                        }`}
-                                    >
-                                        {dashboardStats.propertiesChange > 0 ? (
-                                            <ArrowUpRight className="h-4 w-4" />
-                                        ) : (
-                                            <ArrowDownRight className="h-4 w-4" />
-                                        )}
-                                        {Math.abs(
-                                            dashboardStats.propertiesChange
-                                        )}
-                                        %
-                                    </div>
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    {dashboardStats.totalProperties}
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    Active Properties
-                                </p>
-                            </CardContent>
-                        </Card>
-
-                        <Card className="bg-white shadow-lg border-0">
-                            <CardContent className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="p-2 bg-yellow-100 rounded-lg">
-                                        <Star className="h-6 w-6 text-yellow-600" />
-                                    </div>
-                                    <div
-                                        className={`flex items-center gap-1 text-sm ${
-                                            dashboardStats.ratingChange > 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                        }`}
-                                    >
-                                        {dashboardStats.ratingChange > 0 ? (
-                                            <ArrowUpRight className="h-4 w-4" />
-                                        ) : (
-                                            <ArrowDownRight className="h-4 w-4" />
-                                        )}
-                                        {Math.abs(dashboardStats.ratingChange)}
-                                    </div>
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    {dashboardStats.averageRating}
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    Average Rating
-                                </p>
-                            </CardContent>
-                        </Card>
-
-                        <Card className="bg-white shadow-lg border-0">
-                            <CardContent className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="p-2 bg-purple-100 rounded-lg">
-                                        <MessageSquare className="h-6 w-6 text-purple-600" />
-                                    </div>
-                                    <div
-                                        className={`flex items-center gap-1 text-sm ${
-                                            dashboardStats.reviewsChange > 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                        }`}
-                                    >
-                                        {dashboardStats.reviewsChange > 0 ? (
-                                            <ArrowUpRight className="h-4 w-4" />
-                                        ) : (
-                                            <ArrowDownRight className="h-4 w-4" />
-                                        )}
-                                        {Math.abs(dashboardStats.reviewsChange)}
-                                        %
-                                    </div>
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    {dashboardStats.totalReviews.toLocaleString()}
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    Total Reviews
-                                </p>
-                            </CardContent>
-                        </Card>
-
-                        <Card className="bg-white shadow-lg border-0">
-                            <CardContent className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="p-2 bg-orange-100 rounded-lg">
-                                        <Users className="h-6 w-6 text-orange-600" />
-                                    </div>
-                                    <div
-                                        className={`flex items-center gap-1 text-sm ${
-                                            dashboardStats.occupancyChange > 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                        }`}
-                                    >
-                                        {dashboardStats.occupancyChange > 0 ? (
-                                            <ArrowUpRight className="h-4 w-4" />
-                                        ) : (
-                                            <ArrowDownRight className="h-4 w-4" />
-                                        )}
-                                        {Math.abs(
-                                            dashboardStats.occupancyChange
-                                        )}
-                                        %
-                                    </div>
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    {dashboardStats.occupancyRate}%
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    Occupancy Rate
-                                </p>
-                            </CardContent>
-                        </Card>
-
-                        <Card className="bg-white shadow-lg border-0">
-                            <CardContent className="p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className="p-2 bg-teal-100 rounded-lg">
-                                        <Clock className="h-6 w-6 text-teal-600" />
-                                    </div>
-                                    <div
-                                        className={`flex items-center gap-1 text-sm ${
-                                            dashboardStats.responseChange > 0
-                                                ? "text-green-600"
-                                                : "text-red-600"
-                                        }`}
-                                    >
-                                        {dashboardStats.responseChange > 0 ? (
-                                            <ArrowUpRight className="h-4 w-4" />
-                                        ) : (
-                                            <ArrowDownRight className="h-4 w-4" />
-                                        )}
-                                        {Math.abs(
-                                            dashboardStats.responseChange
-                                        )}
-                                        %
-                                    </div>
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    {dashboardStats.responseRate}%
-                                </h3>
-                                <p className="text-sm text-gray-600">
-                                    Response Rate
-                                </p>
-                            </CardContent>
-                        </Card>
-                    </div>
-                </div>
-
-                {/* Quick Actions */}
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {quickActions.map((action, index) => (
-                            <Link key={index} href={action.href}>
-                                <Card className="bg-white shadow-lg border-0 hover:shadow-xl transition-shadow cursor-pointer">
-                                    <CardContent className="p-6 text-center">
-                                        <div
-                                            className={`inline-flex p-3 rounded-full ${action.color} mb-4`}
-                                        >
-                                            <action.icon className="h-6 w-6 text-white" />
+                        {/* Overview Tab */}
+                        <TabsContent value="overview" className="space-y-6">
+                            {/* Key Metrics */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+                                <Card className="bg-white shadow-lg border-0">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="p-2 bg-green-100 rounded-lg">
+                                                <DollarSign className="h-6 w-6 text-green-600" />
+                                            </div>
+                                            <div
+                                                className={`flex items-center gap-1 text-sm ${
+                                                    dashboardStats.revenueChange >
+                                                    0
+                                                        ? "text-green-600"
+                                                        : "text-red-600"
+                                                }`}
+                                            >
+                                                {dashboardStats.revenueChange >
+                                                0 ? (
+                                                    <ArrowUpRight className="h-4 w-4" />
+                                                ) : (
+                                                    <ArrowDownRight className="h-4 w-4" />
+                                                )}
+                                                {Math.abs(
+                                                    dashboardStats.revenueChange
+                                                )}
+                                                %
+                                            </div>
                                         </div>
-                                        <h3 className="font-semibold text-gray-900">
-                                            {action.label}
+                                        <h3 className="text-2xl font-bold text-gray-900">
+                                            £
+                                            {dashboardStats.totalRevenue.toLocaleString()}
                                         </h3>
+                                        <p className="text-sm text-gray-600">
+                                            Total Revenue
+                                        </p>
                                     </CardContent>
                                 </Card>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                        {/* Properties Management */}
-                        <div className="xl:col-span-2">
-                            <Card className="bg-white shadow-lg border-0">
-                                <CardHeader className="pb-4">
-                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                        <div>
-                                            <CardTitle className="text-2xl font-bold text-gray-900">
-                                                Property Management
-                                            </CardTitle>
-                                            <p className="text-gray-600 mt-1">
-                                                Monitor and manage your
-                                                properties
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-3">
-                                            <div className="relative">
-                                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                                <Input
-                                                    placeholder="Search properties..."
-                                                    className="pl-10 w-64"
-                                                    value={searchQuery}
-                                                    onChange={(e) =>
-                                                        setSearchQuery(
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
+                                <Card className="bg-white shadow-lg border-0">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="p-2 bg-blue-100 rounded-lg">
+                                                <Home className="h-6 w-6 text-blue-600" />
                                             </div>
-                                            <Button className="bg-[#284E4C] hover:bg-[#1e3a38]">
-                                                <Plus className="h-4 w-4 mr-2" />
-                                                Add Property
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-6">
-                                        {recentProperties.map((property) => (
                                             <div
-                                                key={property.id}
-                                                className="flex flex-col sm:flex-row gap-4 p-6 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                                                className={`flex items-center gap-1 text-sm ${
+                                                    dashboardStats.propertiesChange >
+                                                    0
+                                                        ? "text-green-600"
+                                                        : "text-red-600"
+                                                }`}
                                             >
-                                                <div className="relative w-full sm:w-32 h-32 flex-shrink-0">
-                                                    <Image
-                                                        src={property.image}
-                                                        alt={property.name}
-                                                        fill
-                                                        className="object-cover rounded-lg"
-                                                    />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex items-start justify-between mb-2">
-                                                        <div>
-                                                            <h3 className="text-lg font-semibold text-gray-900 truncate">
-                                                                {property.name}
-                                                            </h3>
-                                                            <div className="flex items-center gap-2 text-gray-600 mt-1">
-                                                                <MapPin className="h-4 w-4" />
-                                                                <span className="text-sm">
-                                                                    {
-                                                                        property.location
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <Badge
-                                                                variant={
-                                                                    property.status ===
-                                                                    "Active"
-                                                                        ? "default"
-                                                                        : "secondary"
-                                                                }
-                                                                className={
-                                                                    property.status ===
-                                                                    "Active"
-                                                                        ? "bg-green-100 text-green-800"
-                                                                        : "bg-yellow-100 text-yellow-800"
-                                                                }
-                                                            >
-                                                                {
-                                                                    property.status
-                                                                }
-                                                            </Badge>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                            >
-                                                                <MoreVertical className="h-4 w-4" />
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                                                        <div>
-                                                            <div className="flex items-center gap-1 mb-1">
-                                                                <Star className="h-4 w-4 text-yellow-500" />
-                                                                <span className="font-semibold">
-                                                                    {
-                                                                        property.rating
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                            <p className="text-xs text-gray-600">
-                                                                {
-                                                                    property.reviews
-                                                                }{" "}
-                                                                reviews
-                                                            </p>
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-semibold text-green-600">
-                                                                {
-                                                                    property.revenue
-                                                                }
-                                                            </p>
-                                                            <p className="text-xs text-gray-600">
-                                                                Monthly revenue
-                                                            </p>
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-semibold">
-                                                                {
-                                                                    property.occupancy
-                                                                }
-                                                                %
-                                                            </p>
-                                                            <p className="text-xs text-gray-600">
-                                                                Occupancy
-                                                            </p>
-                                                        </div>
-                                                        <div className="flex gap-2">
-                                                            <Button
-                                                                variant="outline"
-                                                                size="sm"
-                                                            >
-                                                                <Edit className="h-3 w-3" />
-                                                            </Button>
-                                                            <Button
-                                                                variant="outline"
-                                                                size="sm"
-                                                            >
-                                                                <ExternalLink className="h-3 w-3" />
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                {dashboardStats.propertiesChange >
+                                                0 ? (
+                                                    <ArrowUpRight className="h-4 w-4" />
+                                                ) : (
+                                                    <ArrowDownRight className="h-4 w-4" />
+                                                )}
+                                                {Math.abs(
+                                                    dashboardStats.propertiesChange
+                                                )}
+                                                %
                                             </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-6 text-center">
-                                        <Button
-                                            variant="outline"
-                                            className="w-full"
-                                        >
-                                            View All Properties
-                                        </Button>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        {/* Reviews Management */}
-                        <div>
-                            <Card className="bg-white shadow-lg border-0">
-                                <CardHeader className="pb-4">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <CardTitle className="text-xl font-bold text-gray-900">
-                                                Recent Reviews
-                                            </CardTitle>
-                                            <p className="text-gray-600 mt-1 text-sm">
-                                                Latest guest feedback
-                                            </p>
                                         </div>
-                                        <Button variant="outline" size="sm">
-                                            <Filter className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-6">
-                                        {recentReviews.map((review) => (
+                                        <h3 className="text-2xl font-bold text-gray-900">
+                                            {dashboardStats.totalProperties}
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            Active Properties
+                                        </p>
+                                    </CardContent>
+                                </Card>
+
+                                <Card className="bg-white shadow-lg border-0">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="p-2 bg-yellow-100 rounded-lg">
+                                                <Star className="h-6 w-6 text-yellow-600" />
+                                            </div>
                                             <div
-                                                key={review.id}
-                                                className="border-b border-gray-100 pb-6 last:border-0"
+                                                className={`flex items-center gap-1 text-sm ${
+                                                    dashboardStats.ratingChange >
+                                                    0
+                                                        ? "text-green-600"
+                                                        : "text-red-600"
+                                                }`}
                                             >
-                                                <div className="flex items-start gap-3">
-                                                    <div className="relative w-10 h-10 flex-shrink-0">
-                                                        <Image
-                                                            src={review.avatar}
-                                                            alt={review.guest}
-                                                            fill
-                                                            className="object-cover rounded-full"
-                                                        />
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <div className="flex items-center justify-between mb-2">
-                                                            <h4 className="font-semibold text-gray-900 text-sm">
-                                                                {review.guest}
-                                                            </h4>
-                                                            <div className="flex items-center gap-1">
-                                                                {[
-                                                                    ...Array(5),
-                                                                ].map(
-                                                                    (_, i) => (
-                                                                        <Star
-                                                                            key={
-                                                                                i
-                                                                            }
-                                                                            className={`h-3 w-3 ${
-                                                                                i <
-                                                                                review.rating
-                                                                                    ? "text-yellow-400 fill-current"
-                                                                                    : "text-gray-300"
-                                                                            }`}
-                                                                        />
-                                                                    )
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        <p className="text-xs text-gray-600 mb-2">
-                                                            {review.property}
-                                                        </p>
-                                                        <p className="text-sm text-gray-700 mb-3 line-clamp-3">
-                                                            {review.comment}
-                                                        </p>
-                                                        <div className="flex items-center justify-between">
-                                                            <span className="text-xs text-gray-500">
-                                                                {review.date}
-                                                            </span>
-                                                            <div className="flex items-center gap-2">
-                                                                <Badge
-                                                                    variant={
-                                                                        review.status ===
-                                                                        "approved"
-                                                                            ? "default"
-                                                                            : "secondary"
-                                                                    }
-                                                                    className={`text-xs ${
-                                                                        review.status ===
-                                                                        "approved"
-                                                                            ? "bg-green-100 text-green-800"
-                                                                            : "bg-yellow-100 text-yellow-800"
-                                                                    }`}
-                                                                >
-                                                                    {
-                                                                        review.status
-                                                                    }
-                                                                </Badge>
-                                                                {review.status ===
-                                                                    "pending" && (
-                                                                    <div className="flex gap-1">
-                                                                        <Button
-                                                                            variant="outline"
-                                                                            size="sm"
-                                                                            className="h-6 px-2"
-                                                                        >
-                                                                            <CheckCircle className="h-3 w-3" />
-                                                                        </Button>
-                                                                        <Button
-                                                                            variant="outline"
-                                                                            size="sm"
-                                                                            className="h-6 px-2"
-                                                                        >
-                                                                            <XCircle className="h-3 w-3" />
-                                                                        </Button>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                {dashboardStats.ratingChange >
+                                                0 ? (
+                                                    <ArrowUpRight className="h-4 w-4" />
+                                                ) : (
+                                                    <ArrowDownRight className="h-4 w-4" />
+                                                )}
+                                                {Math.abs(
+                                                    dashboardStats.ratingChange
+                                                )}
+                                            </div>
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-900">
+                                            {dashboardStats.averageRating.toFixed(
+                                                1
+                                            )}
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            Average Rating
+                                        </p>
+                                    </CardContent>
+                                </Card>
+
+                                <Card className="bg-white shadow-lg border-0">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="p-2 bg-purple-100 rounded-lg">
+                                                <MessageSquare className="h-6 w-6 text-purple-600" />
+                                            </div>
+                                            <div
+                                                className={`flex items-center gap-1 text-sm ${
+                                                    dashboardStats.reviewsChange >
+                                                    0
+                                                        ? "text-green-600"
+                                                        : "text-red-600"
+                                                }`}
+                                            >
+                                                {dashboardStats.reviewsChange >
+                                                0 ? (
+                                                    <ArrowUpRight className="h-4 w-4" />
+                                                ) : (
+                                                    <ArrowDownRight className="h-4 w-4" />
+                                                )}
+                                                {Math.abs(
+                                                    dashboardStats.reviewsChange
+                                                )}
+                                                %
+                                            </div>
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-900">
+                                            {dashboardStats.totalReviews.toLocaleString()}
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            Total Reviews
+                                        </p>
+                                    </CardContent>
+                                </Card>
+
+                                <Card className="bg-white shadow-lg border-0">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="p-2 bg-orange-100 rounded-lg">
+                                                <Users className="h-6 w-6 text-orange-600" />
+                                            </div>
+                                            <div
+                                                className={`flex items-center gap-1 text-sm ${
+                                                    dashboardStats.occupancyChange >
+                                                    0
+                                                        ? "text-green-600"
+                                                        : "text-red-600"
+                                                }`}
+                                            >
+                                                {dashboardStats.occupancyChange >
+                                                0 ? (
+                                                    <ArrowUpRight className="h-4 w-4" />
+                                                ) : (
+                                                    <ArrowDownRight className="h-4 w-4" />
+                                                )}
+                                                {Math.abs(
+                                                    dashboardStats.occupancyChange
+                                                )}
+                                                %
+                                            </div>
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-900">
+                                            {dashboardStats.occupancyRate}%
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            Occupancy Rate
+                                        </p>
+                                    </CardContent>
+                                </Card>
+
+                                <Card className="bg-white shadow-lg border-0">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="p-2 bg-teal-100 rounded-lg">
+                                                <Clock className="h-6 w-6 text-teal-600" />
+                                            </div>
+                                            <div
+                                                className={`flex items-center gap-1 text-sm ${
+                                                    dashboardStats.responseChange >
+                                                    0
+                                                        ? "text-green-600"
+                                                        : "text-red-600"
+                                                }`}
+                                            >
+                                                {dashboardStats.responseChange >
+                                                0 ? (
+                                                    <ArrowUpRight className="h-4 w-4" />
+                                                ) : (
+                                                    <ArrowDownRight className="h-4 w-4" />
+                                                )}
+                                                {Math.abs(
+                                                    dashboardStats.responseChange
+                                                )}
+                                                %
+                                            </div>
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-900">
+                                            {dashboardStats.responseRate}%
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            Response Rate
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                            </div>
+
+                            {/* Quick Actions */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {quickActions.map((action, index) => (
+                                    <Link key={index} href={action.href}>
+                                        <Card className="bg-white shadow-lg border-0 hover:shadow-xl transition-shadow cursor-pointer">
+                                            <CardContent className="p-6 text-center">
+                                                <div
+                                                    className={`inline-flex p-3 rounded-full ${action.color} mb-4`}
+                                                >
+                                                    <action.icon className="h-6 w-6 text-white" />
+                                                </div>
+                                                <h3 className="font-semibold text-gray-900">
+                                                    {action.label}
+                                                </h3>
+                                            </CardContent>
+                                        </Card>
+                                    </Link>
+                                ))}
+                            </div>
+
+                            {/* Review Management Widget */}
+                            <ReviewManagementWidget
+                                reviews={reviews}
+                                onReviewApproval={handleReviewApproval}
+                            />
+                        </TabsContent>
+
+                        {/* Properties Tab */}
+                        <TabsContent value="properties" className="space-y-6">
+                            <PropertyPerformance reviews={reviews} />
+                        </TabsContent>
+
+                        {/* Reviews Tab */}
+                        <TabsContent value="reviews" className="space-y-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <div className="lg:col-span-2">
+                                    <ReviewManagementWidget
+                                        reviews={reviews}
+                                        onReviewApproval={handleReviewApproval}
+                                    />
+                                </div>
+                                <div>
+                                    <Card>
+                                        <CardHeader>
+                                            <CardTitle>Review Stats</CardTitle>
+                                        </CardHeader>
+                                        <CardContent>
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between">
+                                                    <span className="text-sm text-gray-600">
+                                                        Total Reviews
+                                                    </span>
+                                                    <span className="font-medium">
+                                                        {
+                                                            dashboardStats.totalReviews
+                                                        }
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-sm text-gray-600">
+                                                        Average Rating
+                                                    </span>
+                                                    <span className="font-medium">
+                                                        {dashboardStats.averageRating.toFixed(
+                                                            1
+                                                        )}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-sm text-gray-600">
+                                                        Approved
+                                                    </span>
+                                                    <span className="font-medium text-green-600">
+                                                        {
+                                                            dashboardStats.approvedReviews
+                                                        }
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between">
+                                                    <span className="text-sm text-gray-600">
+                                                        Pending
+                                                    </span>
+                                                    <span className="font-medium text-yellow-600">
+                                                        {
+                                                            dashboardStats.pendingReviews
+                                                        }
+                                                    </span>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-6">
-                                        <Button
-                                            variant="outline"
-                                            className="w-full"
-                                        >
-                                            View All Reviews
-                                        </Button>
-                                    </div>
-                                </CardContent>
-                            </Card>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                            </div>
+                        </TabsContent>
 
-                            {/* Performance Chart */}
-                            <Card className="bg-white shadow-lg border-0 mt-6">
-                                <CardHeader>
-                                    <CardTitle className="text-xl font-bold text-gray-900">
-                                        Performance Overview
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-6">
-                                        <div>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm text-gray-600">
-                                                    Revenue Growth
-                                                </span>
-                                                <span className="text-sm font-semibold text-green-600">
-                                                    +12.5%
-                                                </span>
-                                            </div>
-                                            <Progress
-                                                value={75}
-                                                className="h-2"
-                                            />
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm text-gray-600">
-                                                    Occupancy Rate
-                                                </span>
-                                                <span className="text-sm font-semibold">
-                                                    92%
-                                                </span>
-                                            </div>
-                                            <Progress
-                                                value={92}
-                                                className="h-2"
-                                            />
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm text-gray-600">
-                                                    Guest Satisfaction
-                                                </span>
-                                                <span className="text-sm font-semibold text-green-600">
-                                                    4.8/5
-                                                </span>
-                                            </div>
-                                            <Progress
-                                                value={96}
-                                                className="h-2"
-                                            />
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <span className="text-sm text-gray-600">
-                                                    Response Time
-                                                </span>
-                                                <span className="text-sm font-semibold">
-                                                    &lt; 2hrs
-                                                </span>
-                                            </div>
-                                            <Progress
-                                                value={85}
-                                                className="h-2"
-                                            />
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </div>
-                    </div>
+                        {/* Insights Tab */}
+                        <TabsContent value="insights" className="space-y-6">
+                            <DashboardInsights
+                                reviews={reviews}
+                                timeRange={timeRange}
+                            />
+                        </TabsContent>
+                    </Tabs>
                 </div>
             </main>
 

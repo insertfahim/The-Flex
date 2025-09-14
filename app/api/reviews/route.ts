@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getNormalizedReviews } from "@/lib/hostaway-api";
-import { applyApprovalsToReviews } from "@/lib/review-storage";
+import { prisma } from "@/lib/db";
 
 export async function GET(request: Request) {
     try {
@@ -11,50 +10,83 @@ export async function GET(request: Request) {
         const status = searchParams.get("status");
         const listing = searchParams.get("listing");
 
-        let reviews = await getNormalizedReviews();
+        // Build where clause
+        const where: any = {};
 
-        // Apply stored approval statuses
-        reviews = await applyApprovalsToReviews(reviews);
-
-        // Apply filters
         if (rating) {
-            const minRating = Number.parseInt(rating);
-            reviews = reviews.filter(
-                (review) => review.overallRating >= minRating
-            );
-        }
-
-        if (category) {
-            reviews = reviews.filter(
-                (review) =>
-                    review.categories[
-                        category as keyof typeof review.categories
-                    ] !== undefined
-            );
+            const minRating = Number.parseFloat(rating);
+            where.overallRating = { gte: minRating };
         }
 
         if (channel) {
-            reviews = reviews.filter((review) => review.channel === channel);
+            where.channel = channel.toUpperCase();
         }
 
         if (status) {
             if (status === "approved") {
-                reviews = reviews.filter((review) => review.isApproved);
+                where.isApproved = true;
             } else if (status === "pending") {
-                reviews = reviews.filter(
-                    (review) =>
-                        !review.isApproved && review.status === "published"
-                );
+                where.isApproved = false;
+                where.status = "PUBLISHED";
             } else {
-                reviews = reviews.filter((review) => review.status === status);
+                where.status = status.toUpperCase();
             }
         }
 
         if (listing) {
-            reviews = reviews.filter((review) =>
-                review.listingName.toLowerCase().includes(listing.toLowerCase())
-            );
+            where.property = {
+                name: {
+                    contains: listing,
+                    mode: "insensitive",
+                },
+            };
         }
+
+        // Fetch reviews from database
+        const dbReviews = await prisma.review.findMany({
+            where,
+            include: {
+                property: {
+                    select: {
+                        name: true,
+                        slug: true,
+                        location: true,
+                    },
+                },
+            },
+            orderBy: {
+                submittedAt: "desc",
+            },
+        });
+
+        // Transform to match the existing NormalizedReview interface
+        const reviews = dbReviews.map((review) => ({
+            id: review.id,
+            type: "guest-to-host" as const,
+            status: review.status.toLowerCase() as
+                | "published"
+                | "pending"
+                | "rejected",
+            overallRating: review.overallRating,
+            review: review.review,
+            categories: {
+                cleanliness: review.cleanliness,
+                communication: review.communication,
+                location: review.location,
+                checkin: review.checkin,
+                accuracy: review.accuracy,
+                value: review.value,
+            },
+            submittedAt: review.submittedAt,
+            guestName: review.guestName,
+            listingName: review.property.name,
+            channel: review.channel.toLowerCase() as
+                | "hostaway"
+                | "google"
+                | "airbnb",
+            isApproved: review.isApproved,
+            managerNotes: review.managerNotes,
+        }));
 
         return NextResponse.json({
             success: true,
@@ -75,6 +107,8 @@ export async function GET(request: Request) {
             {
                 success: false,
                 error: "Failed to fetch reviews",
+                message:
+                    error instanceof Error ? error.message : "Unknown error",
             },
             { status: 500 }
         );

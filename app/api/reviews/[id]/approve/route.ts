@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { updateReviewApproval } from "@/lib/review-storage";
+import { prisma } from "@/lib/db";
 
 export async function POST(
     request: Request,
@@ -24,13 +24,28 @@ export async function POST(
             );
         }
 
-        // Update the approval status in storage
-        const approval = await updateReviewApproval(
-            reviewId,
-            approved,
-            managerNotes,
-            updatedBy
-        );
+        // Check if review exists
+        const existingReview = await prisma.review.findUnique({
+            where: { id: reviewId },
+        });
+
+        if (!existingReview) {
+            return NextResponse.json(
+                { error: "Review not found" },
+                { status: 404 }
+            );
+        }
+
+        // Update the review in the database
+        const updatedReview = await prisma.review.update({
+            where: { id: reviewId },
+            data: {
+                isApproved: approved,
+                managerNotes: managerNotes || null,
+                status: approved ? "PUBLISHED" : "REJECTED",
+                updatedAt: new Date(),
+            },
+        });
 
         return NextResponse.json({
             success: true,
@@ -39,8 +54,8 @@ export async function POST(
                 id: reviewId,
                 isApproved: approved,
                 managerNotes,
-                updatedAt: approval.updatedAt,
-                updatedBy: approval.updatedBy,
+                updatedAt: updatedReview.updatedAt,
+                updatedBy: updatedBy,
             },
         });
     } catch (error) {

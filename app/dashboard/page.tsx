@@ -45,26 +45,40 @@ export default function ManagerDashboard() {
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
-    // Fetch reviews data
+    // Fetch data
     useEffect(() => {
-        fetchReviews();
-    }, []);
+        fetchData();
+    }, [timeRange]);
 
-    const fetchReviews = async () => {
+    const fetchData = async () => {
         try {
             setRefreshing(true);
-            const response = await fetch("/api/reviews");
-            const data = await response.json();
-            if (data.success) {
-                setReviews(data.data);
+
+            // Fetch reviews and stats in parallel
+            const [reviewsResponse, statsResponse] = await Promise.all([
+                fetch("/api/reviews"),
+                fetch(`/api/dashboard/stats?timeRange=${timeRange}`),
+            ]);
+
+            const reviewsData = await reviewsResponse.json();
+            const statsData = await statsResponse.json();
+
+            if (reviewsData.success) {
+                setReviews(reviewsData.data);
+            }
+
+            if (statsData.success) {
+                setDashboardStats(statsData.data);
             }
         } catch (error) {
-            console.error("Error fetching reviews:", error);
+            console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
             setRefreshing(false);
         }
     };
+
+    const fetchReviews = fetchData; // Keep for backward compatibility
 
     // Handle review approval
     const handleReviewApproval = async (
@@ -100,29 +114,23 @@ export default function ManagerDashboard() {
         }
     };
 
-    // Calculate dashboard stats from reviews
-    const dashboardStats = {
-        totalRevenue: 245680,
-        revenueChange: 12.5,
-        totalProperties: 47,
-        propertiesChange: 3.2,
-        totalReviews: reviews.length,
-        reviewsChange: 8.7,
-        averageRating:
-            reviews.length > 0
-                ? reviews.reduce((sum, r) => sum + r.overallRating, 0) /
-                  reviews.length
-                : 0,
-        ratingChange: 0.3,
-        occupancyRate: 92,
-        occupancyChange: -2.1,
-        responseRate: 96,
-        responseChange: 4.2,
-        pendingReviews: reviews.filter(
-            (r) => !r.isApproved && r.status === "published"
-        ).length,
-        approvedReviews: reviews.filter((r) => r.isApproved).length,
-    };
+    // Dashboard stats state
+    const [dashboardStats, setDashboardStats] = useState({
+        totalRevenue: 0,
+        revenueChange: 0,
+        totalProperties: 0,
+        propertiesChange: 0,
+        totalReviews: 0,
+        reviewsChange: 0,
+        averageRating: 0,
+        ratingChange: 0,
+        occupancyRate: 0,
+        occupancyChange: 0,
+        responseRate: 0,
+        responseChange: 0,
+        pendingReviews: 0,
+        approvedReviews: 0,
+    });
 
     const quickActions = [
         { icon: Plus, label: "Add Property", color: "bg-blue-500", href: "#" },

@@ -69,8 +69,31 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
     const [filterBy, setFilterBy] = useState<string>("all");
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedTimeRange, setSelectedTimeRange] = useState("30d");
+    const [apiPropertyStats, setApiPropertyStats] = useState<PropertyStats[]>(
+        []
+    );
+    const [loading, setLoading] = useState(true);
 
-    // Generate property statistics from reviews
+    // Fetch property performance data from API
+    useEffect(() => {
+        const fetchPropertyData = async () => {
+            try {
+                const response = await fetch("/api/properties/performance");
+                const data = await response.json();
+                if (data.success) {
+                    setApiPropertyStats(data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching property data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPropertyData();
+    }, []);
+
+    // Generate property statistics from reviews (fallback)
     const propertyStats = useMemo(() => {
         const statsMap: { [key: string]: PropertyStats } = {};
 
@@ -190,9 +213,13 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
         return Object.values(statsMap);
     }, [reviews, selectedTimeRange]);
 
+    // Use API data if available, otherwise fallback to computed stats
+    const finalPropertyStats =
+        apiPropertyStats.length > 0 ? apiPropertyStats : propertyStats;
+
     // Apply filters and sorting
     const filteredAndSortedProperties = useMemo(() => {
-        let filtered = propertyStats;
+        let filtered = finalPropertyStats;
 
         // Apply search filter
         if (searchQuery) {
@@ -251,7 +278,7 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
         });
 
         return filtered;
-    }, [propertyStats, searchQuery, filterBy, sortBy]);
+    }, [finalPropertyStats, searchQuery, filterBy, sortBy]);
 
     const getPerformanceStatus = (property: PropertyStats) => {
         if (property.averageRating >= 4.5)
@@ -283,6 +310,19 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
         );
     };
 
+    if (loading) {
+        return (
+            <div className="space-y-6">
+                <div className="flex items-center justify-center py-12">
+                    <RefreshCw className="h-6 w-6 animate-spin text-[#284E4C]" />
+                    <span className="ml-2 text-gray-600">
+                        Loading property data...
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="space-y-6">
             {/* Filters and Controls */}
@@ -294,7 +334,8 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
                                 Property Performance
                             </CardTitle>
                             <p className="text-sm text-gray-600 mt-1">
-                                Monitor performance across all properties
+                                Monitor performance across all{" "}
+                                {finalPropertyStats.length} properties
                             </p>
                         </div>
                         <div className="flex items-center gap-3">

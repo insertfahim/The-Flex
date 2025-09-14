@@ -1,0 +1,100 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id          Int      @id @default(autoincrement())
+  name        String
+  slug        String   @unique
+  location    String
+  description String?
+  images      String[]
+  bedrooms    Int
+  bathrooms   Int
+  maxGuests   Int
+  pricePerNight Int
+  status      PropertyStatus @default(ACTIVE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  reviews     Review[]
+  stats       PropertyStats[]
+  
+  @@map("properties")
+}
+
+model Review {
+  id            Int      @id @default(autoincrement())
+  propertyId    Int
+  guestName     String
+  guestEmail    String?
+  overallRating Float
+  review        String
+  channel       ReviewChannel
+  status        ReviewStatus @default(PENDING)
+  isApproved    Boolean @default(false)
+  managerNotes  String?
+  submittedAt   DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Category ratings
+  cleanliness     Float?
+  communication   Float?
+  location        Float?
+  checkin         Float?
+  accuracy        Float?
+  value           Float?
+  
+  // Relations
+  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  @@map("reviews")
+}
+
+model PropertyStats {
+  id          Int      @id @default(autoincrement())
+  propertyId  Int
+  month       String   // Format: YYYY-MM
+  revenue     Int      // In cents
+  occupancy   Float    // Percentage
+  totalReviews Int     @default(0)
+  avgRating   Float    @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  
+  @@unique([propertyId, month])
+  @@map("property_stats")
+}
+
+enum PropertyStatus {
+  ACTIVE
+  MAINTENANCE
+  INACTIVE
+}
+
+enum ReviewChannel {
+  HOSTAWAY
+  GOOGLE
+  AIRBNB
+  BOOKING
+  DIRECT
+}
+
+enum ReviewStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+}

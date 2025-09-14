@@ -72,7 +72,7 @@ export default function PropertyPage({ params }: PropertyPageProps) {
             <FlexHeader />
 
             <main>
-                {/* Hero Section */}
+                {/* Photo Gallery Section */}
                 <section className="relative">
                     {/* All listings badge */}
                     <div className="absolute top-4 left-4 z-20">
@@ -149,58 +149,58 @@ export default function PropertyPage({ params }: PropertyPageProps) {
                     </div>
                 </section>
 
+                {/* Property Information Section */}
+                <section className="bg-white py-8">
+                    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="pb-6 border-b border-gray-200">
+                            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+                                {property.name}
+                            </h1>
+                            <div className="flex items-center gap-4 text-lg text-gray-600 mb-4">
+                                <div className="flex items-center gap-1">
+                                    <MapPin className="h-5 w-5" />
+                                    <span>{property.location}</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-6 text-gray-600 mb-4">
+                                <div className="flex items-center gap-1">
+                                    <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                                    <span className="font-semibold text-lg">
+                                        {property.rating}
+                                    </span>
+                                    <span className="text-lg">
+                                        ({property.reviewCount} reviews)
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-6 text-gray-600">
+                                <div className="flex items-center gap-1">
+                                    <Bed className="h-5 w-5" />
+                                    <span className="text-lg">
+                                        {property.bedrooms} bedrooms
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <Bath className="h-5 w-5" />
+                                    <span className="text-lg">
+                                        {property.bathrooms} bathroom
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <Users className="h-5 w-5" />
+                                    <span className="text-lg">
+                                        Up to {property.maxGuests} guests
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Main Content */}
                         <div className="lg:col-span-2 space-y-6">
-                            {/* Property Header */}
-                            <div className="pb-6 border-b border-gray-200">
-                                <div className="flex items-start justify-between mb-4">
-                                    <div>
-                                        <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-                                            {property.name}
-                                        </h1>
-                                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                                            <div className="flex items-center gap-1">
-                                                <MapPin className="h-4 w-4" />
-                                                <span>{property.location}</span>
-                                            </div>
-                                            <div className="flex items-center gap-1">
-                                                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                                <span className="font-semibold">
-                                                    {property.rating}
-                                                </span>
-                                                <span>
-                                                    ({property.reviewCount}{" "}
-                                                    reviews)
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-6 text-gray-600">
-                                    <div className="flex items-center gap-1">
-                                        <Bed className="h-4 w-4" />
-                                        <span>
-                                            {property.bedrooms} bedrooms
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <Bath className="h-4 w-4" />
-                                        <span>
-                                            {property.bathrooms} bathroom
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <Users className="h-4 w-4" />
-                                        <span>
-                                            Up to {property.maxGuests} guests
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
                             {/* Description */}
                             <div>
                                 <h2 className="text-xl font-semibold text-gray-900 mb-4">

@@ -130,9 +130,10 @@ export function ReviewManagementWidget({
         );
     };
 
-    const formatDate = (date: Date) => {
+    const formatDate = (date: Date | string) => {
+        const dateObj = typeof date === "string" ? new Date(date) : date;
         return new Intl.RelativeTimeFormat("en", { numeric: "auto" }).format(
-            Math.ceil((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
+            Math.ceil((dateObj.getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
             "day"
         );
     };

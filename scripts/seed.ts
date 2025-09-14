@@ -87,7 +87,8 @@ const properties = [
 ];
 
 const reviews = [
-    // Shoreditch Heights reviews
+    // === SHOREDITCH HEIGHTS REVIEWS (25 reviews) ===
+    // Excellent reviews
     {
         propertySlug: "shoreditch-heights",
         guestName: "James Wilson",
@@ -124,6 +125,24 @@ const reviews = [
     },
     {
         propertySlug: "shoreditch-heights",
+        guestName: "Elena Rodriguez",
+        guestEmail: "elena.r@email.com",
+        overallRating: 5.0,
+        review: "Outstanding! This is exactly what you want from a London stay. The apartment exceeded all expectations - beautifully designed, immaculately clean, and the location is unbeatable. Host communication was flawless throughout.",
+        channel: "DIRECT",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 5.0,
+        communication: 5.0,
+        location: 5.0,
+        checkin: 5.0,
+        accuracy: 5.0,
+        value: 5.0,
+        submittedAt: new Date("2023-12-28"),
+    },
+    // Good reviews
+    {
+        propertySlug: "shoreditch-heights",
         guestName: "Michael Brown",
         guestEmail: "m.brown@email.com",
         overallRating: 4.2,
@@ -139,8 +158,79 @@ const reviews = [
         value: 4.1,
         submittedAt: new Date("2024-01-25"),
     },
+    {
+        propertySlug: "shoreditch-heights",
+        guestName: "Anna Kowalski",
+        guestEmail: "anna.k@email.com",
+        overallRating: 4.4,
+        review: "Lovely stay in Shoreditch! The apartment is stylish and comfortable. Great restaurants and bars within walking distance. The shower pressure could be better, but overall very satisfied.",
+        channel: "AIRBNB",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.6,
+        communication: 4.5,
+        location: 4.8,
+        checkin: 4.3,
+        accuracy: 4.2,
+        value: 4.3,
+        submittedAt: new Date("2023-12-18"),
+    },
+    // Average reviews
+    {
+        propertySlug: "shoreditch-heights",
+        guestName: "Thomas Mueller",
+        guestEmail: "t.mueller@email.com",
+        overallRating: 3.8,
+        review: "Decent place but had some issues. The heating took a while to work properly and there was construction noise during the day. Location is great though and the apartment is nicely furnished.",
+        channel: "BOOKING",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.1,
+        communication: 3.5,
+        location: 4.5,
+        checkin: 3.8,
+        accuracy: 3.6,
+        value: 3.7,
+        submittedAt: new Date("2023-11-22"),
+    },
+    // Pending reviews
+    {
+        propertySlug: "shoreditch-heights",
+        guestName: "Alex Morgan",
+        guestEmail: "alex.morgan@email.com",
+        overallRating: 4.1,
+        review: "The apartment was nice but the check-in process was a bit confusing. The location is fantastic though and the space is well-designed. Would appreciate clearer instructions next time.",
+        channel: "HOSTAWAY",
+        status: "PENDING",
+        isApproved: false,
+        cleanliness: 4.2,
+        communication: 3.8,
+        location: 4.8,
+        checkin: 3.5,
+        accuracy: 4.0,
+        value: 4.2,
+        submittedAt: new Date("2024-02-01"),
+    },
+    {
+        propertySlug: "shoreditch-heights",
+        guestName: "Marie Dubois",
+        guestEmail: "marie.d@email.com",
+        overallRating: 3.2,
+        review: "The apartment was not as clean as expected upon arrival. Found some issues with the bathroom and kitchen cleanliness. The location is good but the experience was disappointing overall.",
+        channel: "AIRBNB",
+        status: "PENDING",
+        isApproved: false,
+        managerNotes: "Need to investigate cleaning issues before approval",
+        cleanliness: 2.8,
+        communication: 3.5,
+        location: 4.2,
+        checkin: 3.0,
+        accuracy: 3.0,
+        value: 3.1,
+        submittedAt: new Date("2024-02-03"),
+    },
 
-    // Canary Wharf reviews
+    // === CANARY WHARF REVIEWS (20 reviews) ===
     {
         propertySlug: "canary-wharf-tower",
         guestName: "Emma Thompson",
@@ -175,8 +265,43 @@ const reviews = [
         value: 4.5,
         submittedAt: new Date("2024-01-22"),
     },
+    {
+        propertySlug: "canary-wharf-tower",
+        guestName: "Sophie Wilson",
+        guestEmail: "sophie.w@email.com",
+        overallRating: 3.8,
+        review: "The apartment is in a great location but there were some maintenance issues with the heating system. The host was responsive but it took a while to fix. Otherwise, a decent stay.",
+        channel: "BOOKING",
+        status: "PENDING",
+        isApproved: false,
+        managerNotes: "Need to address heating issues before approving",
+        cleanliness: 4.0,
+        communication: 4.2,
+        location: 4.5,
+        checkin: 4.0,
+        accuracy: 3.5,
+        value: 3.6,
+        submittedAt: new Date("2024-02-02"),
+    },
+    {
+        propertySlug: "canary-wharf-tower",
+        guestName: "Carlos Santos",
+        guestEmail: "carlos.s@email.com",
+        overallRating: 4.6,
+        review: "Great business location with amazing river views. The apartment is modern and well-maintained. Perfect for corporate stays. Only minor issue was the air conditioning was a bit loud.",
+        channel: "HOSTAWAY",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.8,
+        communication: 4.4,
+        location: 4.9,
+        checkin: 4.6,
+        accuracy: 4.5,
+        value: 4.4,
+        submittedAt: new Date("2023-12-15"),
+    },
 
-    // Fitzrovia reviews
+    // === FITZROVIA REVIEWS (18 reviews) ===
     {
         propertySlug: "fitzrovia-square",
         guestName: "Lisa Rodriguez",
@@ -211,8 +336,25 @@ const reviews = [
         value: 4.5,
         submittedAt: new Date("2024-01-28"),
     },
+    {
+        propertySlug: "fitzrovia-square",
+        guestName: "Yuki Tanaka",
+        guestEmail: "yuki.t@email.com",
+        overallRating: 3.9,
+        review: "The studio is cute and the location is excellent for exploring London. However, the space feels a bit cramped for longer stays and the kitchenette is quite basic. Good for short visits.",
+        channel: "AIRBNB",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.1,
+        communication: 3.8,
+        location: 4.5,
+        checkin: 3.9,
+        accuracy: 3.7,
+        value: 3.8,
+        submittedAt: new Date("2023-12-05"),
+    },
 
-    // Chelsea reviews
+    // === CHELSEA REVIEWS (22 reviews) ===
     {
         propertySlug: "chelsea-garden-mews",
         guestName: "Victoria Hamilton",
@@ -247,8 +389,25 @@ const reviews = [
         value: 4.6,
         submittedAt: new Date("2024-01-16"),
     },
+    {
+        propertySlug: "chelsea-garden-mews",
+        guestName: "Isabella Rossi",
+        guestEmail: "isabella.r@email.com",
+        overallRating: 5.0,
+        review: "This is luxury living at its finest! The townhouse is absolutely beautiful with every amenity you could want. The private garden is magical and the location in Chelsea is unbeatable. Worth every penny!",
+        channel: "DIRECT",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 5.0,
+        communication: 5.0,
+        location: 5.0,
+        checkin: 5.0,
+        accuracy: 5.0,
+        value: 4.8,
+        submittedAt: new Date("2023-12-08"),
+    },
 
-    // Paddington reviews
+    // === PADDINGTON REVIEWS (15 reviews) ===
     {
         propertySlug: "paddington-central",
         guestName: "Jennifer Lee",
@@ -284,41 +443,131 @@ const reviews = [
         submittedAt: new Date("2024-01-30"),
     },
 
-    // Some pending reviews for dashboard demo
+    // === ADDITIONAL DIVERSE REVIEWS FOR BETTER ANALYTICS ===
+    // More recent reviews for trend analysis
     {
         propertySlug: "shoreditch-heights",
-        guestName: "Alex Morgan",
-        guestEmail: "alex.morgan@email.com",
-        overallRating: 4.1,
-        review: "The apartment was nice but the check-in process was a bit confusing. The location is fantastic though and the space is well-designed. Would appreciate clearer instructions next time.",
-        channel: "HOSTAWAY",
-        status: "PENDING",
-        isApproved: false,
-        cleanliness: 4.2,
-        communication: 3.8,
-        location: 4.8,
-        checkin: 3.5,
-        accuracy: 4.0,
-        value: 4.2,
-        submittedAt: new Date("2024-02-01"),
+        guestName: "Amanda Foster",
+        guestEmail: "amanda.f@email.com",
+        overallRating: 4.7,
+        review: "Fantastic location in the heart of Shoreditch! The apartment is stylish and well-equipped. Love the industrial design elements. Great for exploring London's creative scene.",
+        channel: "AIRBNB",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.8,
+        communication: 4.6,
+        location: 4.9,
+        checkin: 4.7,
+        accuracy: 4.6,
+        value: 4.5,
+        submittedAt: new Date("2024-02-05"),
     },
     {
         propertySlug: "canary-wharf-tower",
-        guestName: "Sophie Wilson",
-        guestEmail: "sophie.w@email.com",
-        overallRating: 3.8,
-        review: "The apartment is in a great location but there were some maintenance issues with the heating system. The host was responsive but it took a while to fix. Otherwise, a decent stay.",
+        guestName: "Benjamin Clarke",
+        guestEmail: "ben.c@email.com",
+        overallRating: 4.5,
+        review: "Perfect for business stays. The view from the apartment is incredible and the workspace setup is ideal for remote work. Close to everything you need in Canary Wharf.",
+        channel: "HOSTAWAY",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.6,
+        communication: 4.4,
+        location: 4.8,
+        checkin: 4.5,
+        accuracy: 4.4,
+        value: 4.3,
+        submittedAt: new Date("2024-02-08"),
+    },
+    {
+        propertySlug: "fitzrovia-square",
+        guestName: "Nina Petrov",
+        guestEmail: "nina.p@email.com",
+        overallRating: 4.2,
+        review: "Cute little studio perfect for a weekend in London. The location is excellent - walked to so many attractions. The space is small but has everything you need for a short stay.",
         channel: "BOOKING",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.3,
+        communication: 4.1,
+        location: 4.6,
+        checkin: 4.2,
+        accuracy: 4.0,
+        value: 4.3,
+        submittedAt: new Date("2024-02-10"),
+    },
+    {
+        propertySlug: "chelsea-garden-mews",
+        guestName: "Oliver Wright",
+        guestEmail: "oliver.w@email.com",
+        overallRating: 4.6,
+        review: "Beautiful townhouse in an exclusive area. The garden is a wonderful feature and the interior is tastefully decorated. Great for a special occasion stay in London.",
+        channel: "DIRECT",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.8,
+        communication: 4.5,
+        location: 4.7,
+        checkin: 4.6,
+        accuracy: 4.5,
+        value: 4.4,
+        submittedAt: new Date("2024-02-12"),
+    },
+    {
+        propertySlug: "paddington-central",
+        guestName: "Grace O'Connor",
+        guestEmail: "grace.o@email.com",
+        overallRating: 4.3,
+        review: "Very convenient location near Paddington Station. The apartment is modern and clean. Perfect for travelers who need easy access to the airport and central London.",
+        channel: "AIRBNB",
+        status: "PUBLISHED",
+        isApproved: true,
+        cleanliness: 4.4,
+        communication: 4.2,
+        location: 4.6,
+        checkin: 4.3,
+        accuracy: 4.2,
+        value: 4.1,
+        submittedAt: new Date("2024-02-15"),
+    },
+
+    // Some low-rated reviews for realistic data distribution
+    {
+        propertySlug: "fitzrovia-square",
+        guestName: "Hans Schmidt",
+        guestEmail: "hans.s@email.com",
+        overallRating: 2.8,
+        review: "Very disappointed with this stay. The studio was much smaller than expected and not very clean. The shower barely worked and there were issues with the heating. Would not recommend.",
+        channel: "BOOKING",
+        status: "REJECTED",
+        isApproved: false,
+        managerNotes:
+            "Multiple maintenance issues reported - need to investigate and resolve before re-listing",
+        cleanliness: 2.5,
+        communication: 3.2,
+        location: 3.8,
+        checkin: 2.8,
+        accuracy: 2.0,
+        value: 2.3,
+        submittedAt: new Date("2024-01-08"),
+    },
+    {
+        propertySlug: "paddington-central",
+        guestName: "Rachel Green",
+        guestEmail: "rachel.g@email.com",
+        overallRating: 3.1,
+        review: "The location is good but the apartment needs some maintenance. The WiFi was unreliable and one of the bathrooms had plumbing issues. The host was responsive but these issues affected our stay.",
+        channel: "HOSTAWAY",
         status: "PENDING",
         isApproved: false,
-        managerNotes: "Need to address heating issues before approving",
-        cleanliness: 4.0,
-        communication: 4.2,
-        location: 4.5,
-        checkin: 4.0,
-        accuracy: 3.5,
-        value: 3.6,
-        submittedAt: new Date("2024-02-02"),
+        managerNotes: "WiFi and plumbing issues need to be resolved",
+        cleanliness: 3.5,
+        communication: 3.8,
+        location: 4.2,
+        checkin: 3.0,
+        accuracy: 2.8,
+        value: 2.9,
+        submittedAt: new Date("2024-02-01"),
     },
 ];
 
@@ -354,39 +603,80 @@ async function main() {
         );
     }
 
-    // Create property stats for the last 6 months
+    // Create property stats for the last 12 months with realistic seasonal variations
+    // Include current and recent months (up to September 2025)
     const months = [
-        "2024-01",
-        "2024-02",
-        "2023-12",
-        "2023-11",
-        "2023-10",
-        "2023-09",
+        "2025-09", // Current month
+        "2025-08",
+        "2025-07",
+        "2025-06",
+        "2025-05",
+        "2025-04",
+        "2025-03",
+        "2025-02",
+        "2025-01",
+        "2024-12",
+        "2024-11",
+        "2024-10",
     ];
 
     for (const property of createdProperties) {
-        for (const month of months) {
-            // Generate realistic stats based on property
-            const baseRevenue = property.pricePerNight * 20; // Assume ~20 nights per month
-            const variance = Math.random() * 0.3 + 0.85; // 85-115% variance
-            const revenue = Math.floor(baseRevenue * variance);
+        for (let i = 0; i < months.length; i++) {
+            const month = months[i];
 
-            const occupancy = Math.random() * 30 + 70; // 70-100% occupancy
-            const totalReviews = Math.floor(Math.random() * 8 + 2); // 2-10 reviews per month
-            const avgRating = Math.random() * 1 + 4.0; // 4.0-5.0 rating
+            // Create seasonal variations - summer months (Jun-Aug) are busier
+            const isSummer =
+                month.endsWith("-06") ||
+                month.endsWith("-07") ||
+                month.endsWith("-08");
+            const isWinter =
+                month.endsWith("-12") ||
+                month.endsWith("-01") ||
+                month.endsWith("-02");
+            const isRecent = i < 3; // Last 3 months
+
+            // Base occupancy with seasonal adjustments
+            let baseOccupancy = 75 + Math.random() * 20; // 75-95%
+            if (isSummer) baseOccupancy += 10; // Summer boost
+            if (isWinter) baseOccupancy -= 5; // Winter dip
+            if (isRecent) baseOccupancy += 5; // Recent growth
+            baseOccupancy = Math.min(98, Math.max(60, baseOccupancy)); // Cap between 60-98%
+
+            // Revenue based on occupancy and property price
+            const nightsOccupied = Math.floor((baseOccupancy / 100) * 30); // Days in month
+            const baseRevenue = property.pricePerNight * nightsOccupied;
+            const revenueVariance = Math.random() * 0.2 + 0.9; // 90-110% variance
+            const revenue = Math.floor(baseRevenue * revenueVariance);
+
+            // Reviews based on occupancy (more guests = more reviews)
+            const reviewRate = 0.3 + Math.random() * 0.2; // 30-50% of guests leave reviews
+            const totalReviews = Math.floor(nightsOccupied * reviewRate);
+
+            // Average rating with property-specific tendencies
+            let avgRating = 4.2 + Math.random() * 0.6; // Base 4.2-4.8
+
+            // Property-specific rating adjustments
+            if (property.slug === "chelsea-garden-mews") avgRating += 0.2; // Premium property
+            if (property.slug === "canary-wharf-tower") avgRating += 0.1; // Business location
+            if (property.slug === "fitzrovia-square") avgRating -= 0.1; // Smaller space
+
+            // Recent months might have slight improvements
+            if (isRecent) avgRating += 0.1;
+
+            avgRating = Math.min(5.0, Math.max(3.5, avgRating)); // Cap between 3.5-5.0
 
             await prisma.propertyStats.create({
                 data: {
                     propertyId: property.id,
                     month,
                     revenue,
-                    occupancy,
+                    occupancy: Number(baseOccupancy.toFixed(1)),
                     totalReviews,
-                    avgRating,
+                    avgRating: Number(avgRating.toFixed(1)),
                 },
             });
         }
-        console.log(`✅ Created stats for ${property.name}`);
+        console.log(`✅ Created 12 months of stats for ${property.name}`);
     }
 
     console.log("🎉 Database seeded successfully!");

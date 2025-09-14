@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -29,10 +29,9 @@ export function FlexHeader() {
                     <nav className="hidden md:flex items-center space-x-8">
                         <Link
                             href="/landlords"
-                            className="flex items-center space-x-1 text-white hover:text-gray-200 transition-colors"
+                            className="text-white hover:text-gray-200 transition-colors"
                         >
-                            <span>Landlords</span>
-                            <ChevronDown className="h-4 w-4" />
+                            Landlords
                         </Link>
                         <Link
                             href="/about"

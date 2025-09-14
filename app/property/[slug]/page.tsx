@@ -20,7 +20,7 @@ import {
     Heart,
     Share2,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface PropertyPageProps {
     params: {
@@ -28,10 +28,136 @@ interface PropertyPageProps {
     };
 }
 
+// Property data configuration with images and details
+const propertyData: Record<string, any> = {
+    "shoreditch-heights": {
+        images: [
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Modern apartment living room
+            "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Kitchen
+            "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bedroom
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bathroom
+            "https://images.unsplash.com/photo-1571055107559-3e67626fa8be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Living area
+            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Dining area
+            "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // View
+        ],
+        neighborhood:
+            "Shoreditch is one of London's most vibrant and creative neighborhoods, known for its street art, trendy restaurants, and buzzing nightlife. Located in the heart of East London, you'll be within walking distance of Liverpool Street Station, Brick Lane's famous curry houses, and the trendy boutiques of Boxpark Shoreditch.",
+    },
+    "canary-wharf-tower": {
+        images: [
+            "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Modern high-rise apartment
+            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Kitchen
+            "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bedroom
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bathroom
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // City view
+            "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Building exterior
+        ],
+        neighborhood:
+            "Canary Wharf is London's premier financial district, featuring stunning skyscrapers, world-class shopping at Canary Wharf Mall, and excellent transport links. Perfect for business travelers, with easy access to the DLR, Jubilee Line, and Thames Clipper services.",
+    },
+    "fitzrovia-square": {
+        images: [
+            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Studio apartment
+            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Kitchen area
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bathroom
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Living space
+            "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Street view
+        ],
+        neighborhood:
+            "Fitzrovia is a charming neighborhood in Central London, known for its historic Georgian architecture, independent boutiques, and excellent dining scene. Located between Oxford Street and Regent's Park, it offers the perfect balance of central location and village-like atmosphere.",
+    },
+    "chelsea-garden-mews": {
+        images: [
+            "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Luxury townhouse
+            "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Kitchen
+            "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Master bedroom
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Living room
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bathroom
+            "https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Garden
+            "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Exterior
+        ],
+        neighborhood:
+            "Chelsea is one of London's most prestigious neighborhoods, famous for the King's Road, Chelsea Physic Garden, and its proximity to Hyde Park. This affluent area offers world-class shopping, fine dining, and beautiful Victorian architecture.",
+    },
+    "paddington-central": {
+        images: [
+            "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Modern apartment
+            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Kitchen
+            "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bedroom
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Living room
+            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Bathroom
+            "https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80", // Building view
+        ],
+        neighborhood:
+            "Paddington is a major transport hub with excellent connections across London and beyond. The area features beautiful Victorian squares, Hyde Park nearby, and the famous Paddington Station with direct links to Heathrow Airport.",
+    },
+};
+
 export default function PropertyPage({ params }: PropertyPageProps) {
     const [isLiked, setIsLiked] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+    const [property, setProperty] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchPropertyData();
+    }, [params.slug]);
+
+    const fetchPropertyData = async () => {
+        try {
+            const response = await fetch(`/api/properties/${params.slug}`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    const propertyInfo = data.data;
+                    const configData =
+                        propertyData[params.slug] ||
+                        propertyData["shoreditch-heights"];
+
+                    setProperty({
+                        ...propertyInfo,
+                        images: configData.images,
+                        neighborhood: configData.neighborhood,
+                        amenities: [
+                            { icon: Wifi, name: "Free WiFi" },
+                            { icon: Car, name: "Parking" },
+                            { icon: Coffee, name: "Coffee Machine" },
+                            { icon: Tv, name: "Smart TV" },
+                            { icon: Wind, name: "Air Conditioning" },
+                            { icon: Utensils, name: "Full Kitchen" },
+                        ],
+                        highlights: generateHighlights(propertyInfo),
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching property:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const generateHighlights = (propertyInfo: any) => {
+        const highlights = [
+            `Prime ${propertyInfo.location} location`,
+            "Modern design and furnishings",
+            "High-speed WiFi",
+            "24/7 guest support",
+        ];
+
+        if (propertyInfo.bedrooms > 0) {
+            highlights.push("Comfortable bedrooms");
+        }
+        if (propertyInfo.bathrooms > 1) {
+            highlights.push("Multiple bathrooms");
+        }
+        if (propertyInfo.maxGuests >= 4) {
+            highlights.push("Perfect for families");
+        }
+
+        return highlights;
+    };
 
     const openImageModal = (imageUrl: string, index: number) => {
         setSelectedImage(imageUrl);
@@ -43,12 +169,14 @@ export default function PropertyPage({ params }: PropertyPageProps) {
     };
 
     const nextImage = () => {
+        if (!property) return;
         const nextIndex = (selectedImageIndex + 1) % property.images.length;
         setSelectedImageIndex(nextIndex);
         setSelectedImage(property.images[nextIndex]);
     };
 
     const prevImage = () => {
+        if (!property) return;
         const prevIndex =
             selectedImageIndex === 0
                 ? property.images.length - 1
@@ -57,53 +185,39 @@ export default function PropertyPage({ params }: PropertyPageProps) {
         setSelectedImage(property.images[prevIndex]);
     };
 
-    // Mock property data - in a real app, this would be fetched based on the slug
-    const property = {
-        name: "2B N1 A - 29 Shoreditch Heights",
-        location: "Shoreditch, London",
-        price: "£120",
-        rating: 4.8,
-        reviewCount: 127,
-        bedrooms: 2,
-        bathrooms: 1,
-        maxGuests: 4,
-        images: [
-            "/modern-apartment-bedroom-with-natural-light.jpg",
-            "/stylish-living-room-with-contemporary-furniture.jpg",
-            "/modern-kitchen-marble.png",
-            "/elegant-bathroom-with-rainfall-shower.jpg",
-            "/stylish-bedroom-with-yellow-accents-and-artwork.jpg",
-            "/modern-furnished-apartment-living-room.jpg",
-            "/modern-london-apartment-exterior.jpg",
-            "/luxury-canary-wharf-apartment.jpg",
-            "/stylish-fitzrovia-studio-apartment.jpg",
-            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-            "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-            "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-            "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-            "https://images.unsplash.com/photo-1571055107559-3e67626fa8be?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-            "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-            "https://images.unsplash.com/photo-1574180045827-681f8a1a9622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-        ],
-        amenities: [
-            { icon: Wifi, name: "Free WiFi" },
-            { icon: Car, name: "Parking" },
-            { icon: Coffee, name: "Coffee Machine" },
-            { icon: Tv, name: "Smart TV" },
-            { icon: Wind, name: "Air Conditioning" },
-            { icon: Utensils, name: "Full Kitchen" },
-        ],
-        description:
-            "Experience luxury living in the heart of Shoreditch with this beautifully designed 2-bedroom apartment. Featuring modern amenities, stylish furnishings, and floor-to-ceiling windows that flood the space with natural light. Perfect for business travelers, couples, or small families looking for a premium stay in one of London's most vibrant neighborhoods.",
-        highlights: [
-            "Prime Shoreditch location",
-            "Modern design and furnishings",
-            "Floor-to-ceiling windows",
-            "Fully equipped kitchen",
-            "High-speed WiFi",
-            "24/7 guest support",
-        ],
-    };
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white">
+                <FlexHeader />
+                <div className="flex items-center justify-center min-h-[60vh]">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+                        <p className="mt-4 text-gray-600">
+                            Loading property...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (!property) {
+        return (
+            <div className="min-h-screen bg-white">
+                <FlexHeader />
+                <div className="flex items-center justify-center min-h-[60vh]">
+                    <div className="text-center">
+                        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                            Property not found
+                        </h1>
+                        <p className="text-gray-600">
+                            The property you're looking for doesn't exist.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-white">
@@ -467,13 +581,7 @@ export default function PropertyPage({ params }: PropertyPageProps) {
                                 About the neighborhood
                             </h3>
                             <p className="text-gray-700 leading-relaxed">
-                                Shoreditch is one of London's most vibrant and
-                                creative neighborhoods, known for its street
-                                art, trendy restaurants, and buzzing nightlife.
-                                Located in the heart of East London, you'll be
-                                within walking distance of Liverpool Street
-                                Station, Brick Lane's famous curry houses, and
-                                the trendy boutiques of Boxpark Shoreditch.
+                                {property.neighborhood}
                             </p>
                         </div>
                     </div>

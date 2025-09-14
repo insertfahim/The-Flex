@@ -28,6 +28,8 @@ import {
     BarChart3,
     Eye,
     RefreshCw,
+    Bed,
+    Bath,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -427,212 +429,98 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
             </Card>
 
             {/* Property Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {filteredAndSortedProperties.map((property) => {
                     const performance = getPerformanceStatus(property);
+                    const slug = property.name
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")
+                        .replace(/[^a-z0-9-]/g, "")
+                        .replace(/-+/g, "-")
+                        .replace(/^-|-$/g, "");
 
                     return (
-                        <Card
+                        <div
                             key={property.id}
-                            className="hover:shadow-lg transition-shadow"
+                            className="group rounded-xl overflow-hidden shadow-lg cursor-pointer transition-all hover:shadow-xl hover:scale-[1.02] bg-[#fffdf6] opacity-100"
                         >
-                            <CardHeader className="pb-3">
-                                <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Badge
-                                                className={`${performance.color} text-white text-xs`}
-                                            >
-                                                {performance.label}
-                                            </Badge>
-                                            <Badge
-                                                variant={
-                                                    property.status === "Active"
-                                                        ? "default"
-                                                        : "secondary"
-                                                }
-                                                className="text-xs"
-                                            >
-                                                {property.status}
-                                            </Badge>
-                                        </div>
-                                        <CardTitle className="text-lg leading-tight">
-                                            {property.name}
-                                        </CardTitle>
-                                        <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
-                                            <MapPin className="h-3 w-3" />
-                                            {property.location}
-                                        </div>
-                                    </div>
-                                    <div className="relative w-16 h-16 rounded-lg overflow-hidden">
+                            <Link
+                                href={`/property/${slug}`}
+                                className="block w-full h-full touch-manipulation"
+                            >
+                                {/* Property Image Header with 16:9 aspect ratio */}
+                                <div className="relative">
+                                    <div className="relative pb-[56.25%]">
                                         <Image
                                             src={property.image}
                                             alt={property.name}
                                             fill
-                                            className="object-cover"
+                                            className="absolute inset-0 w-full h-full object-cover"
                                         />
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                {/* Rating and Reviews */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        {renderStars(property.averageRating)}
-                                        <div className="flex items-center gap-1 text-sm">
-                                            {property.ratingChange > 0 ? (
-                                                <TrendingUp className="h-3 w-3 text-green-600" />
-                                            ) : (
-                                                <TrendingDown className="h-3 w-3 text-red-600" />
-                                            )}
-                                            <span
-                                                className={
-                                                    property.ratingChange > 0
-                                                        ? "text-green-600"
-                                                        : "text-red-600"
-                                                }
-                                            >
-                                                {Math.abs(
-                                                    property.ratingChange
-                                                ).toFixed(1)}
-                                            </span>
+
+                                        {/* Price Badge - Top Right */}
+                                        <div className="absolute top-2 right-1">
+                                            <div className="backdrop-blur-sm rounded-md shadow-lg border bg-[rgba(255,253,246,0.94)] border-[rgba(92,92,90,0.125)]">
+                                                <div className="px-1.5 py-0.5">
+                                                    <div className="flex flex-col items-end">
+                                                        <div className="flex items-baseline gap-0.5">
+                                                            <span className="text-base font-bold text-[#284E4C]">
+                                                                £
+                                                                {Math.floor(
+                                                                    Math.random() *
+                                                                        200 +
+                                                                        150
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                        <span className="text-[10px] text-[#5c5c5a]">
+                                                            per night
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                                </div>
+
+                                {/* Property Details */}
+                                <div className="p-4">
+                                    <h3 className="text-lg font-bold break-words hyphens-auto mb-2 text-[#333333]">
+                                        {property.name}
+                                    </h3>
+                                    <p className="text-sm mb-3 text-[#5c5c5a]">
+                                        {property.location}
+                                    </p>
+                                    <div className="flex items-center gap-3 text-xs text-[#5c5c5a]">
                                         <div className="flex items-center gap-1">
-                                            <MessageSquare className="h-3 w-3" />
-                                            {property.totalReviews} reviews
+                                            <Bed className="h-3 w-3" />
+                                            <span>
+                                                {Math.floor(Math.random() * 3) +
+                                                    1}{" "}
+                                                Bedrooms
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <Bath className="h-3 w-3" />
+                                            <span>
+                                                {Math.floor(Math.random() * 2) +
+                                                    1}{" "}
+                                                Bathroom
+                                            </span>
                                         </div>
                                         <div className="flex items-center gap-1">
                                             <Users className="h-3 w-3" />
-                                            {property.occupancy}% occupancy
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Review Status */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="text-gray-600">
-                                            Review Status
-                                        </span>
-                                        <div className="flex items-center gap-2">
-                                            {property.pendingReviews > 0 && (
-                                                <Badge
-                                                    variant="outline"
-                                                    className="text-xs"
-                                                >
-                                                    <Clock className="h-3 w-3 mr-1" />
-                                                    {property.pendingReviews}{" "}
-                                                    pending
-                                                </Badge>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-2 text-xs">
-                                        <div className="flex items-center gap-1">
-                                            <CheckCircle className="h-3 w-3 text-green-600" />
                                             <span>
-                                                {property.approvedReviews}{" "}
-                                                approved
+                                                Up to{" "}
+                                                {Math.floor(Math.random() * 4) +
+                                                    2}{" "}
+                                                guests
                                             </span>
                                         </div>
-                                        {property.rejectedReviews > 0 && (
-                                            <div className="flex items-center gap-1">
-                                                <AlertTriangle className="h-3 w-3 text-red-600" />
-                                                <span>
-                                                    {property.rejectedReviews}{" "}
-                                                    rejected
-                                                </span>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
-
-                                {/* Category Scores */}
-                                <div className="space-y-2">
-                                    <h4 className="text-sm font-medium">
-                                        Category Performance
-                                    </h4>
-                                    <div className="grid grid-cols-2 gap-2 text-xs">
-                                        {Object.entries(
-                                            property.categoryScores
-                                        ).map(([category, score]) => {
-                                            if (score === 0) return null;
-                                            return (
-                                                <div
-                                                    key={category}
-                                                    className="flex items-center justify-between"
-                                                >
-                                                    <span className="capitalize text-gray-600">
-                                                        {category.replace(
-                                                            "_",
-                                                            " "
-                                                        )}
-                                                    </span>
-                                                    <span className="font-medium">
-                                                        {score.toFixed(1)}
-                                                    </span>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-
-                                {/* Top Issues */}
-                                {property.topIssues.length > 0 && (
-                                    <div className="space-y-2">
-                                        <h4 className="text-sm font-medium text-orange-600">
-                                            Areas for Improvement
-                                        </h4>
-                                        <div className="space-y-1">
-                                            {property.topIssues
-                                                .slice(0, 2)
-                                                .map((issue, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className="text-xs text-gray-600 bg-orange-50 px-2 py-1 rounded"
-                                                    >
-                                                        {issue}
-                                                    </div>
-                                                ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Actions */}
-                                <div className="flex items-center gap-2 pt-2 border-t">
-                                    <Link
-                                        href={`/dashboard/reviews?listing=${encodeURIComponent(
-                                            property.name
-                                        )}`}
-                                    >
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="flex-1"
-                                        >
-                                            <Eye className="h-3 w-3 mr-1" />
-                                            Reviews
-                                        </Button>
-                                    </Link>
-                                    <Link
-                                        href={`/dashboard/analytics?property=${encodeURIComponent(
-                                            property.name
-                                        )}`}
-                                    >
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="flex-1"
-                                        >
-                                            <BarChart3 className="h-3 w-3 mr-1" />
-                                            Analytics
-                                        </Button>
-                                    </Link>
-                                </div>
-                            </CardContent>
-                        </Card>
+                            </Link>
+                        </div>
                     );
                 })}
             </div>
@@ -671,12 +559,25 @@ function getLocationFromName(name: string): string {
 }
 
 function getImageFromName(name: string): string {
-    const images = [
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=300&h=200&fit=crop",
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=300&h=200&fit=crop",
-        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=300&h=200&fit=crop",
-    ];
-    return images[Math.floor(Math.random() * images.length)];
+    // Map property names to specific high-quality images
+    const propertyImages: Record<string, string> = {
+        "2B N1 A - 29 Shoreditch Heights":
+            "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "1B E1 B - 15 Canary Wharf Tower":
+            "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "Studio W1 C - 42 Fitzrovia Square":
+            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "3B SW3 A - 12 Chelsea Garden Mews":
+            "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        "2B W2 D - 8 Paddington Central":
+            "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    };
+
+    // Return specific image for known properties, or fallback to a default
+    return (
+        propertyImages[name] ||
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    );
 }
 
 function generateRevenue(): string {

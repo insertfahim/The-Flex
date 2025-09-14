@@ -10,12 +10,20 @@ export function generateReviewAnalytics(
               totalReviews
             : 0;
 
-    // Rating distribution (1-10 scale)
+    // Rating distribution (1-10 scale, grouped for better visualization)
     const ratingDistribution: { [key: number]: number } = {};
+
+    // Group ratings into ranges for better visualization
+    reviews.forEach((review) => {
+        const rating = Math.floor(review.overallRating);
+        ratingDistribution[rating] = (ratingDistribution[rating] || 0) + 1;
+    });
+
+    // Ensure all rating levels are represented (1-10)
     for (let i = 1; i <= 10; i++) {
-        ratingDistribution[i] = reviews.filter(
-            (r) => r.overallRating === i
-        ).length;
+        if (!ratingDistribution[i]) {
+            ratingDistribution[i] = 0;
+        }
     }
 
     // Category averages
@@ -125,7 +133,7 @@ function generateMonthlyTrends(reviews: NormalizedReview[]) {
         months.push({
             month: monthName,
             count: monthReviews.length,
-            averageRating,
+            averageRating: Number(averageRating.toFixed(1)),
         });
     }
 

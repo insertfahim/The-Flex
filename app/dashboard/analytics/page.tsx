@@ -11,7 +11,10 @@ import Link from "next/link";
 import type { ReviewAnalytics } from "@/types/review";
 
 export default function AnalyticsPage() {
-    const { reviews, loading, error } = useReviews();
+    // Use demo data to ensure charts always show meaningful insights
+    const { reviews, loading, error } = useReviews(undefined, {
+        useDemo: true,
+    });
     const [analytics, setAnalytics] = useState<ReviewAnalytics | null>(null);
 
     useEffect(() => {
@@ -91,7 +94,11 @@ export default function AnalyticsPage() {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {analytics ? (
-                    <AnalyticsDashboard analytics={analytics} />
+                    <AnalyticsDashboard
+                        analytics={analytics}
+                        isDemoData={true}
+                        reviews={reviews}
+                    />
                 ) : (
                     <Card>
                         <CardContent className="pt-6">

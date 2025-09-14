@@ -1,6 +1,44 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+// Helper function to extract location-based slug from full property name slugs
+// e.g., "3b-sw3-a-12-chelsea-garden-mews" -> "chelsea-garden-mews"
+function extractLocationSlug(slug: string): string {
+    // Known location patterns that appear at the end of property slugs
+    const locationPatterns = [
+        "shoreditch-heights",
+        "canary-wharf-tower",
+        "fitzrovia-square",
+        "chelsea-garden-mews",
+        "paddington-central",
+    ];
+
+    for (const pattern of locationPatterns) {
+        if (slug.includes(pattern)) {
+            return pattern;
+        }
+    }
+
+    // If no known pattern found, try to extract the last meaningful part
+    // Remove property code patterns (like "3b-sw3-a-12-")
+    const parts = slug.split("-");
+    if (parts.length > 3) {
+        // Look for parts that start with numbers (like room codes) and remove everything before location
+        let locationStartIndex = -1;
+        for (let i = 0; i < parts.length; i++) {
+            if (!parts[i].match(/^[0-9]+[a-z]*$/i)) {
+                locationStartIndex = i;
+                break;
+            }
+        }
+        if (locationStartIndex > 0) {
+            return parts.slice(locationStartIndex).join("-");
+        }
+    }
+
+    return slug; // Return original if no pattern found
+}
+
 export async function GET(
     request: Request,
     { params }: { params: { slug: string } }
@@ -8,7 +46,8 @@ export async function GET(
     try {
         const { slug } = params;
 
-        const property = await prisma.property.findUnique({
+        // First try exact slug match
+        let property = await prisma.property.findUnique({
             where: { slug },
             include: {
                 reviews: {
@@ -26,6 +65,32 @@ export async function GET(
                 },
             },
         });
+
+        // If not found, try to extract the location part from longer slugs
+        // e.g., "3b-sw3-a-12-chelsea-garden-mews" -> "chelsea-garden-mews"
+        if (!property) {
+            const extractedSlug = extractLocationSlug(slug);
+            if (extractedSlug !== slug) {
+                property = await prisma.property.findUnique({
+                    where: { slug: extractedSlug },
+                    include: {
+                        reviews: {
+                            where: { isApproved: true },
+                            select: {
+                                overallRating: true,
+                            },
+                        },
+                        _count: {
+                            select: {
+                                reviews: {
+                                    where: { isApproved: true },
+                                },
+                            },
+                        },
+                    },
+                });
+            }
+        }
 
         if (!property) {
             return NextResponse.json(

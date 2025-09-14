@@ -16,6 +16,7 @@ import {
     PieChart,
     Pie,
     Cell,
+    Legend,
 } from "recharts";
 import { AlertTriangle, Star, Users, MessageSquare, Info } from "lucide-react";
 import type { ReviewAnalytics } from "@/types/review";
@@ -359,13 +360,16 @@ export function AnalyticsDashboard({
                                 />
                                 <Tooltip
                                     formatter={(value, name) => [
-                                        name === "count"
+                                        name === "Review Count"
                                             ? value
                                             : `${value}/10`,
-                                        name === "count"
-                                            ? "Reviews"
-                                            : "Avg Rating",
+                                        name,
                                     ]}
+                                />
+                                <Legend
+                                    verticalAlign="bottom"
+                                    height={36}
+                                    iconType="line"
                                 />
                                 <Line
                                     yAxisId="left"
@@ -378,7 +382,7 @@ export function AnalyticsDashboard({
                                         strokeWidth: 2,
                                         r: 4,
                                     }}
-                                    name="count"
+                                    name="Review Count"
                                 />
                                 <Line
                                     yAxisId="right"
@@ -391,7 +395,7 @@ export function AnalyticsDashboard({
                                         strokeWidth: 2,
                                         r: 4,
                                     }}
-                                    name="averageRating"
+                                    name="Average Rating"
                                 />
                             </LineChart>
                         </ResponsiveContainer>

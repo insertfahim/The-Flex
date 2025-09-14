@@ -31,8 +31,6 @@ import {
     ArrowDownRight,
     RefreshCw,
     AlertTriangle,
-    Plus,
-    Calendar,
     Clock,
 } from "lucide-react";
 import Link from "next/link";
@@ -219,18 +217,11 @@ export default function ManagerDashboard() {
     });
 
     const quickActions = [
-        { icon: Plus, label: "Add Property", color: "bg-blue-500", href: "#" },
         {
             icon: MessageSquare,
             label: "Manage Reviews",
             color: "bg-green-500",
             href: "/dashboard/reviews",
-        },
-        {
-            icon: Calendar,
-            label: "Schedule Maintenance",
-            color: "bg-orange-500",
-            href: "#",
         },
         {
             icon: BarChart3,

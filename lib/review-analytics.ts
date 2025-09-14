@@ -106,12 +106,38 @@ export function generateReviewAnalytics(
 }
 
 function generateMonthlyTrends(reviews: NormalizedReview[]) {
-    const months = [];
-    const now = new Date();
+    if (reviews.length === 0) {
+        return [];
+    }
 
-    for (let i = 5; i >= 0; i--) {
-        const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const monthName = date.toLocaleDateString("en-US", {
+    // Find the actual date range of reviews
+    const reviewDates = reviews.map((r) => new Date(r.submittedAt));
+    const oldestDate = new Date(
+        Math.min(...reviewDates.map((d) => d.getTime()))
+    );
+    const newestDate = new Date(
+        Math.max(...reviewDates.map((d) => d.getTime()))
+    );
+
+    // Generate months between oldest and newest review, up to 12 months
+    const months = [];
+    const startDate = new Date(
+        oldestDate.getFullYear(),
+        oldestDate.getMonth(),
+        1
+    );
+    const endDate = new Date(
+        newestDate.getFullYear(),
+        newestDate.getMonth(),
+        1
+    );
+
+    let currentDate = new Date(startDate);
+    let monthCount = 0;
+    const maxMonths = 12; // Limit to prevent too many months
+
+    while (currentDate <= endDate && monthCount < maxMonths) {
+        const monthName = currentDate.toLocaleDateString("en-US", {
             month: "short",
             year: "numeric",
         });
@@ -119,8 +145,8 @@ function generateMonthlyTrends(reviews: NormalizedReview[]) {
         const monthReviews = reviews.filter((review) => {
             const reviewDate = new Date(review.submittedAt);
             return (
-                reviewDate.getMonth() === date.getMonth() &&
-                reviewDate.getFullYear() === date.getFullYear()
+                reviewDate.getMonth() === currentDate.getMonth() &&
+                reviewDate.getFullYear() === currentDate.getFullYear()
             );
         });
 
@@ -135,6 +161,10 @@ function generateMonthlyTrends(reviews: NormalizedReview[]) {
             count: monthReviews.length,
             averageRating: Number(averageRating.toFixed(1)),
         });
+
+        // Move to next month
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        monthCount++;
     }
 
     return months;

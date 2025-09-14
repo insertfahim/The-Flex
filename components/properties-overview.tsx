@@ -21,6 +21,9 @@ import {
     ArrowUpDown,
     Eye,
     Calendar,
+    Map,
+    Grid3X3,
+    List,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,6 +37,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { CompactPropertyCard } from "@/components/compact-property-card";
+import { PropertiesMap } from "@/components/properties-map";
 
 interface Property {
     id: number;
@@ -48,6 +52,10 @@ interface Property {
     rating: number;
     reviewCount: number;
     images: string[];
+    latitude?: number;
+    longitude?: number;
+    address?: string;
+    pricePerNight?: number;
     amenities: Array<{
         icon: any;
         name: string;
@@ -71,6 +79,9 @@ const allProperties: Property[] = [
         price: "£215",
         rating: 4.8,
         reviewCount: 24,
+        latitude: 51.4946,
+        longitude: -0.2678,
+        address: "Chiswick Park, London W4",
         images: [
             "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/23248-239686-vSshtj4kthrc5t5McAEQ8FdVRwBccjlyX8Ld8tGz7zA-65c414b9d2721",
             "https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/23248-239686-AuErzjkPylT8SQ4DWlkvwcdaaKR5PtVWuqIBGCMKNiM-65c414b7f41ed",
@@ -105,6 +116,10 @@ const allProperties: Property[] = [
         price: "£120",
         rating: 4.7,
         reviewCount: 32,
+        latitude: 51.526165,
+        longitude: -0.080325,
+        address:
+            "Shoreditch, Hackney, London, Greater London, England, United Kingdom",
         images: [
             "/modern-apartment-bedroom-with-natural-light.jpg",
             "/stylish-living-room-with-contemporary-furniture.jpg",
@@ -325,7 +340,7 @@ export function PropertiesOverview({
     const [likedProperties, setLikedProperties] = useState<Set<number>>(
         new Set()
     );
-    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+    const [viewMode, setViewMode] = useState<"grid" | "list" | "map">("grid");
 
     const filteredProperties = allProperties
         .filter((property) => {
@@ -449,8 +464,54 @@ export function PropertiesOverview({
                         </Select>
                     </div>
 
-                    {/* Sort */}
+                    {/* Sort and View Mode */}
                     <div className="flex items-center gap-2">
+                        {/* View Mode Toggle */}
+                        <div className="flex bg-white border border-[#284E4C]/20 rounded-lg overflow-hidden">
+                            <Button
+                                variant={
+                                    viewMode === "grid" ? "default" : "ghost"
+                                }
+                                size="sm"
+                                onClick={() => setViewMode("grid")}
+                                className={`rounded-none ${
+                                    viewMode === "grid"
+                                        ? "bg-[#284E4C] text-white hover:bg-[#1a332f]"
+                                        : "text-[#284E4C] hover:bg-[#284E4C]/10"
+                                }`}
+                            >
+                                <Grid3X3 className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                variant={
+                                    viewMode === "list" ? "default" : "ghost"
+                                }
+                                size="sm"
+                                onClick={() => setViewMode("list")}
+                                className={`rounded-none ${
+                                    viewMode === "list"
+                                        ? "bg-[#284E4C] text-white hover:bg-[#1a332f]"
+                                        : "text-[#284E4C] hover:bg-[#284E4C]/10"
+                                }`}
+                            >
+                                <List className="h-4 w-4" />
+                            </Button>
+                            <Button
+                                variant={
+                                    viewMode === "map" ? "default" : "ghost"
+                                }
+                                size="sm"
+                                onClick={() => setViewMode("map")}
+                                className={`rounded-none ${
+                                    viewMode === "map"
+                                        ? "bg-[#284E4C] text-white hover:bg-[#1a332f]"
+                                        : "text-[#284E4C] hover:bg-[#284E4C]/10"
+                                }`}
+                            >
+                                <Map className="h-4 w-4" />
+                            </Button>
+                        </div>
+
                         <Select value={sortBy} onValueChange={setSortBy}>
                             <SelectTrigger className="w-full sm:w-[180px] bg-white border-[#284E4C]/20">
                                 <ArrowUpDown className="h-4 w-4 mr-2" />
@@ -486,7 +547,7 @@ export function PropertiesOverview({
                 </div>
             )}
 
-            {/* Properties Grid */}
+            {/* Properties Display */}
             {compact ? (
                 <div className="space-y-3 mb-12">
                     {filteredProperties.map((property) => (
@@ -497,6 +558,22 @@ export function PropertiesOverview({
                             onToggleLike={toggleLike}
                         />
                     ))}
+                </div>
+            ) : viewMode === "map" ? (
+                <div className="mb-12">
+                    <PropertiesMap
+                        properties={filteredProperties.map((property) => ({
+                            ...property,
+                            pricePerNight:
+                                parseInt(
+                                    property.price.replace(/[^\d]/g, "")
+                                ) || 0,
+                        }))}
+                        height="600px"
+                        onPropertySelect={(property) => {
+                            window.open(`/property/${property.slug}`, "_blank");
+                        }}
+                    />
                 </div>
             ) : (
                 <div

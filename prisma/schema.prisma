@@ -22,6 +22,13 @@ model Property {
   maxGuests   Int
   pricePerNight Int
   status      PropertyStatus @default(ACTIVE)
+  
+  // Mapbox integration fields
+  latitude    Float?
+  longitude   Float?
+  address     String?
+  neighborhood String?
+  
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   

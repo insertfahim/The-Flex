@@ -141,7 +141,7 @@ export default function ReviewsManagementPage() {
             } else if (filters.status === "pending") {
                 filtered = filtered.filter(
                     (review) =>
-                        !review.isApproved && review.status === "published"
+                        !review.isApproved && review.status === "pending"
                 );
             } else {
                 filtered = filtered.filter(
@@ -176,9 +176,8 @@ export default function ReviewsManagementPage() {
     const stats = {
         total: reviews.length,
         approved: reviews.filter((r) => r.isApproved).length,
-        pending: reviews.filter(
-            (r) => !r.isApproved && r.status === "published"
-        ).length,
+        pending: reviews.filter((r) => !r.isApproved && r.status === "pending")
+            .length,
         rejected: reviews.filter((r) => r.status === "rejected").length,
         averageRating:
             reviews.length > 0

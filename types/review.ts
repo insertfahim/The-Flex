@@ -31,7 +31,7 @@ export interface NormalizedReview {
     submittedAt: Date;
     guestName: string;
     listingName: string;
-    channel: "hostaway" | "google" | "airbnb";
+    channel: "hostaway" | "google" | "airbnb" | "booking" | "direct";
     isApproved: boolean;
     managerNotes?: string;
 }

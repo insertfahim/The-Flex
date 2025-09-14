@@ -4,22 +4,22 @@ import { prisma } from "@/lib/db";
 // Demo data for when database is empty
 const generateDemoStats = (timeRange: string) => {
     const baseStats = {
-        totalRevenue: 20139,
-        revenueChange: -9.3,
+        totalRevenue: 21384,
+        revenueChange: 3.1,
         totalProperties: 5,
         propertiesChange: 3.2,
-        totalReviews: 14,
-        reviewsChange: 8.7,
-        averageRating: 8.3,
-        ratingChange: 0.3,
-        occupancyRate: 86.5,
-        occupancyChange: -10.8,
+        totalReviews: 27,
+        reviewsChange: 0.0,
+        averageRating: 4.3,
+        ratingChange: 0.0,
+        occupancyRate: 90.8,
+        occupancyChange: 7.2,
         responseRate: 96,
         responseChange: 4.2,
-        pendingReviews: 2,
-        approvedReviews: 12,
-        rejectedReviews: 0,
-        totalReviewsAllTime: 14,
+        pendingReviews: 0,
+        approvedReviews: 22,
+        rejectedReviews: 1,
+        totalReviewsAllTime: 27,
     };
 
     // Adjust based on time range
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
         }
 
         try {
-            // Try to get real data from database
+            // Get basic counts
             const [
                 totalProperties,
                 totalReviews,
@@ -101,7 +101,7 @@ export async function GET(request: Request) {
                 prisma.review.count({
                     where: {
                         isApproved: false,
-                        status: "PUBLISHED",
+                        status: "PENDING",
                     },
                 }),
                 prisma.review.count({
@@ -114,7 +114,7 @@ export async function GET(request: Request) {
                 }),
             ]);
 
-            // Calculate average rating
+            // Calculate average rating for approved reviews in the time range
             const avgRatingResult = await prisma.review.aggregate({
                 _avg: {
                     overallRating: true,
@@ -125,15 +125,7 @@ export async function GET(request: Request) {
                 },
             });
 
-            // Always use real database data when available
-            console.log("Database stats:", {
-                totalReviews,
-                pendingReviews,
-                approvedReviews,
-                rejectedReviews,
-            });
-
-            // Get revenue data from property stats
+            // Get current and previous month stats for comparison
             const currentMonth = now.toISOString().slice(0, 7); // YYYY-MM format
             const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
                 .toISOString()
@@ -152,31 +144,90 @@ export async function GET(request: Request) {
                 }),
             ]);
 
-            // Calculate changes
+            // Calculate revenue metrics
             const currentRevenue = currentMonthStats._sum.revenue || 0;
-            const lastRevenue = lastMonthStats._sum.revenue || 1;
+            const lastRevenue = lastMonthStats._sum.revenue || 0;
             const revenueChange =
-                ((currentRevenue - lastRevenue) / lastRevenue) * 100;
+                lastRevenue > 0
+                    ? ((currentRevenue - lastRevenue) / lastRevenue) * 100
+                    : 0;
 
+            // Calculate occupancy metrics
             const currentOccupancy = currentMonthStats._avg.occupancy || 0;
-            const lastOccupancy = lastMonthStats._avg.occupancy || 1;
+            const lastOccupancy = lastMonthStats._avg.occupancy || 0;
             const occupancyChange = currentOccupancy - lastOccupancy;
 
-            // Mock some additional stats that would come from other systems
+            // Calculate previous period reviews for comparison
+            const previousPeriodStart = new Date(startDate);
+            const periodDiff = now.getTime() - startDate.getTime();
+            previousPeriodStart.setTime(startDate.getTime() - periodDiff);
+
+            const previousPeriodReviews = await prisma.review.count({
+                where: {
+                    submittedAt: {
+                        gte: previousPeriodStart,
+                        lt: startDate,
+                    },
+                },
+            });
+
+            const reviewsChange =
+                previousPeriodReviews > 0
+                    ? ((recentReviews - previousPeriodReviews) /
+                          previousPeriodReviews) *
+                      100
+                    : recentReviews > 0
+                    ? 100
+                    : 0;
+
+            // Calculate previous period rating for comparison
+            const prevAvgRatingResult = await prisma.review.aggregate({
+                _avg: {
+                    overallRating: true,
+                },
+                where: {
+                    isApproved: true,
+                    submittedAt: {
+                        gte: previousPeriodStart,
+                        lt: startDate,
+                    },
+                },
+            });
+
+            const currentAvgRating = avgRatingResult._avg.overallRating || 0;
+            const previousAvgRating =
+                prevAvgRatingResult._avg.overallRating || 0;
+            const ratingChange =
+                previousAvgRating > 0
+                    ? currentAvgRating - previousAvgRating
+                    : 0;
+
+            // Mock response rate (would come from communication system)
             const responseRate = 96;
             const responseChange = 4.2;
+
+            // Calculate overall average rating for all approved reviews (not time-limited)
+            const overallAvgRatingResult = await prisma.review.aggregate({
+                _avg: {
+                    overallRating: true,
+                },
+                where: {
+                    isApproved: true,
+                },
+            });
+
+            const overallAvgRating =
+                overallAvgRatingResult._avg.overallRating || 0;
 
             const stats = {
                 totalRevenue: Math.floor(currentRevenue / 100), // Convert from pence to pounds
                 revenueChange: Number(revenueChange.toFixed(1)),
                 totalProperties,
                 propertiesChange: 3.2, // Mock - would calculate from property creation dates
-                totalReviews: recentReviews,
-                reviewsChange: 8.7, // Mock - would calculate from previous period
-                averageRating: Number(
-                    (avgRatingResult._avg.overallRating || 0).toFixed(1)
-                ),
-                ratingChange: 0.3, // Mock - would calculate from previous period
+                totalReviews: totalReviews, // Show total reviews, not time-filtered
+                reviewsChange: Number(reviewsChange.toFixed(1)),
+                averageRating: Number(overallAvgRating.toFixed(1)), // Overall average rating
+                ratingChange: Number(ratingChange.toFixed(1)),
                 occupancyRate: Number(currentOccupancy.toFixed(1)),
                 occupancyChange: Number(occupancyChange.toFixed(1)),
                 responseRate,
@@ -185,7 +236,10 @@ export async function GET(request: Request) {
                 approvedReviews,
                 rejectedReviews,
                 totalReviewsAllTime: totalReviews,
+                recentReviews: recentReviews, // Add time-filtered reviews as separate field
             };
+
+            console.log("Real database stats calculated:", stats);
 
             return NextResponse.json({
                 success: true,
@@ -195,18 +249,17 @@ export async function GET(request: Request) {
             });
         } catch (dbError) {
             console.warn("Database query failed, using demo data:", dbError);
+
+            // Fallback to demo data
+            const demoStats = generateDemoStats(timeRange);
+            return NextResponse.json({
+                success: true,
+                data: demoStats,
+                timeRange,
+                dataSource: "demo",
+                warning: "Database query failed, using demo data",
+            });
         }
-
-        // Fallback to demo data
-        console.log("Using demo data for dashboard stats");
-        const demoStats = generateDemoStats(timeRange);
-
-        return NextResponse.json({
-            success: true,
-            data: demoStats,
-            timeRange,
-            dataSource: "demo",
-        });
     } catch (error) {
         console.error("Error fetching dashboard stats:", error);
 

@@ -7,9 +7,6 @@ export async function GET() {
         const properties = await prisma.property.findMany({
             include: {
                 reviews: {
-                    where: {
-                        isApproved: true,
-                    },
                     orderBy: {
                         submittedAt: "desc",
                     },
@@ -29,17 +26,23 @@ export async function GET() {
 
             // Calculate review metrics
             const totalReviews = reviews.length;
-            const averageRating =
-                totalReviews > 0
-                    ? reviews.reduce((sum, r) => sum + r.overallRating, 0) /
-                      totalReviews
-                    : 0;
-
-            const pendingReviews = reviews.filter((r) => !r.isApproved).length;
             const approvedReviews = reviews.filter((r) => r.isApproved).length;
+            const pendingReviews = reviews.filter(
+                (r) => !r.isApproved && r.status !== "REJECTED"
+            ).length;
             const rejectedReviews = reviews.filter(
                 (r) => r.status === "REJECTED"
             ).length;
+
+            // Calculate average rating based on approved reviews only
+            const approvedReviewsList = reviews.filter((r) => r.isApproved);
+            const averageRating =
+                approvedReviewsList.length > 0
+                    ? approvedReviewsList.reduce(
+                          (sum, r) => sum + r.overallRating,
+                          0
+                      ) / approvedReviewsList.length
+                    : 0;
 
             // Calculate category scores
             const categoryScores = {
@@ -51,8 +54,8 @@ export async function GET() {
                 value: 0,
             };
 
-            if (totalReviews > 0) {
-                const validReviews = reviews.filter(
+            if (approvedReviewsList.length > 0) {
+                const validReviews = approvedReviewsList.filter(
                     (r) => r.cleanliness !== null
                 );
                 if (validReviews.length > 0) {
@@ -114,9 +117,9 @@ export async function GET() {
                     topIssues.push("Check-in difficulties");
             }
 
-            // Channel breakdown
+            // Channel breakdown - only count approved reviews
             const channelBreakdown: { [key: string]: number } = {};
-            reviews.forEach((review) => {
+            approvedReviewsList.forEach((review) => {
                 const channel = review.channel.toLowerCase();
                 channelBreakdown[channel] =
                     (channelBreakdown[channel] || 0) + 1;
@@ -154,7 +157,9 @@ export async function GET() {
                         ? "Maintenance"
                         : "Inactive",
                 lastReviewDate:
-                    totalReviews > 0 ? reviews[0].submittedAt : new Date(),
+                    approvedReviewsList.length > 0
+                        ? approvedReviewsList[0].submittedAt
+                        : new Date(),
                 channelBreakdown,
             };
         });

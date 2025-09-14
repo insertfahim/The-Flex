@@ -27,7 +27,7 @@ export async function GET(request: Request) {
                 where.isApproved = true;
             } else if (status === "pending") {
                 where.isApproved = false;
-                where.status = "PUBLISHED";
+                where.status = "PENDING";
             } else {
                 where.status = status.toUpperCase();
             }
@@ -59,6 +59,8 @@ export async function GET(request: Request) {
             },
         });
 
+        console.log(`Found ${dbReviews.length} reviews in database`);
+
         // Transform to match the existing NormalizedReview interface
         const reviews = dbReviews.map((review) => ({
             id: review.id,
@@ -83,7 +85,9 @@ export async function GET(request: Request) {
             channel: review.channel.toLowerCase() as
                 | "hostaway"
                 | "google"
-                | "airbnb",
+                | "airbnb"
+                | "booking"
+                | "direct",
             isApproved: review.isApproved,
             managerNotes: review.managerNotes,
         }));

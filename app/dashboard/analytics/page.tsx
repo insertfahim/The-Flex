@@ -11,10 +11,8 @@ import Link from "next/link";
 import type { ReviewAnalytics } from "@/types/review";
 
 export default function AnalyticsPage() {
-    // Use demo data to ensure charts always show meaningful insights
-    const { reviews, loading, error } = useReviews(undefined, {
-        useDemo: true,
-    });
+    // Use real data for analytics - fallback to demo if no real data exists
+    const { reviews, loading, error } = useReviews();
     const [analytics, setAnalytics] = useState<ReviewAnalytics | null>(null);
 
     useEffect(() => {
@@ -96,7 +94,7 @@ export default function AnalyticsPage() {
                 {analytics ? (
                     <AnalyticsDashboard
                         analytics={analytics}
-                        isDemoData={true}
+                        isDemoData={false}
                         reviews={reviews}
                     />
                 ) : (

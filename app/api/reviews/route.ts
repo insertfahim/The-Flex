@@ -24,10 +24,14 @@ export async function GET(request: Request) {
 
         if (status) {
             if (status === "approved") {
+                // For approved reviews, they must be approved AND published (not rejected)
                 where.isApproved = true;
+                where.status = "PUBLISHED";
             } else if (status === "pending") {
                 where.isApproved = false;
                 where.status = "PENDING";
+            } else if (status === "rejected") {
+                where.status = "REJECTED";
             } else {
                 where.status = status.toUpperCase();
             }
@@ -92,7 +96,7 @@ export async function GET(request: Request) {
             managerNotes: review.managerNotes,
         }));
 
-        return NextResponse.json({
+        const response = NextResponse.json({
             success: true,
             data: reviews,
             count: reviews.length,
@@ -104,6 +108,16 @@ export async function GET(request: Request) {
                 listing,
             },
         });
+
+        // Add cache control headers for real-time updates
+        response.headers.set(
+            "Cache-Control",
+            "no-cache, no-store, must-revalidate"
+        );
+        response.headers.set("Pragma", "no-cache");
+        response.headers.set("Expires", "0");
+
+        return response;
     } catch (error) {
         console.error("Error in /api/reviews:", error);
 

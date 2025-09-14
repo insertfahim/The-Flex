@@ -67,7 +67,7 @@ export function ReviewCard({ review, onApprove }: ReviewCardProps) {
     };
 
     const renderStars = (rating: number) => {
-        return Array.from({ length: 10 }, (_, i) => (
+        return Array.from({ length: 5 }, (_, i) => (
             <Star
                 key={i}
                 className={`h-3 w-3 ${

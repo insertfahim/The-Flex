@@ -117,7 +117,7 @@ export function DashboardInsights({
                       100
                     : 0,
             pendingCount: filteredReviews.filter(
-                (r) => !r.isApproved && r.status === "published"
+                (r) => !r.isApproved && r.status === "pending"
             ).length,
         };
     }, [reviews, timeRange]);
@@ -569,7 +569,7 @@ function generateIssueAlerts(reviews: NormalizedReview[]): IssueAlert[] {
 
     // Pending reviews alert
     const pendingReviews = reviews.filter(
-        (r) => !r.isApproved && r.status === "published"
+        (r) => !r.isApproved && r.status === "pending"
     );
     if (pendingReviews.length > 10) {
         alerts.push({

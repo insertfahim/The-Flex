@@ -159,9 +159,6 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* Reviews Section */}
-                <PublicReviewsSection maxReviews={6} />
-
                 {/* Flexibility Section */}
                 <section className="py-20 bg-[#FFF9E9]">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -300,6 +297,9 @@ export default function HomePage() {
 
                 {/* Testimonial Section */}
                 <TestimonialSection />
+
+                {/* Public Reviews Section */}
+                <PublicReviewsSection maxReviews={12} />
 
                 {/* About Section */}
                 <section className="py-16 bg-white">

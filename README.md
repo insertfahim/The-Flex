@@ -112,7 +112,7 @@ interface NormalizedReview {
 **Purpose**: Fetch all reviews with optional filtering
 **Parameters**:
 
--   `rating`: Minimum rating filter (1-10)
+-   `rating`: Minimum rating filter (1-5)
 -   `category`: Filter by review category
 -   `channel`: Filter by source channel (hostaway, google)
 -   `status`: Filter by review status (published, pending, rejected)
@@ -201,7 +201,7 @@ All API routes implement consistent error handling:
 
 Implemented in `ReviewFilters` component:
 
--   Rating threshold filtering (1-10 scale)
+-   Rating threshold filtering (1-5 scale)
 -   Category-based filtering
 -   Channel source filtering
 -   Date range filtering

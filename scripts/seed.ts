@@ -88,7 +88,7 @@ const properties = [
 
 const reviews = [
     // === SHOREDITCH HEIGHTS REVIEWS (25 reviews) ===
-    // Excellent reviews
+    // James Wilson review - REJECTED (was previously approved)
     {
         propertySlug: "shoreditch-heights",
         guestName: "James Wilson",
@@ -96,8 +96,8 @@ const reviews = [
         overallRating: 4.8,
         review: "Absolutely fantastic stay! The apartment was spotless and the location couldn't be better. Walking distance to everything in Shoreditch. The host was incredibly responsive and helpful. Will definitely stay again!",
         channel: "HOSTAWAY",
-        status: "PUBLISHED",
-        isApproved: true,
+        status: "REJECTED",
+        isApproved: false,
         cleanliness: 5.0,
         communication: 4.8,
         location: 5.0,

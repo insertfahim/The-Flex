@@ -71,7 +71,7 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
     const [sortBy, setSortBy] = useState<string>("rating");
     const [filterBy, setFilterBy] = useState<string>("all");
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedTimeRange, setSelectedTimeRange] = useState("30d");
+    const [selectedTimeRange, setSelectedTimeRange] = useState("all");
     const [apiPropertyStats, setApiPropertyStats] = useState<PropertyStats[]>(
         []
     );
@@ -300,7 +300,7 @@ export function PropertyPerformance({ reviews }: PropertyPerformanceProps) {
                     <Star
                         key={i}
                         className={`h-4 w-4 ${
-                            i < Math.floor(rating / 2)
+                            i < Math.floor(rating)
                                 ? "text-yellow-400 fill-current"
                                 : "text-gray-300"
                         }`}

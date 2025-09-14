@@ -58,7 +58,7 @@ export function ReviewManagementWidget({
     const filteredReviews = reviews.filter((review) => {
         switch (filterStatus) {
             case "pending":
-                return !review.isApproved && review.status === "published";
+                return !review.isApproved && review.status === "pending";
             case "approved":
                 return review.isApproved;
             case "rejected":
@@ -117,7 +117,7 @@ export function ReviewManagementWidget({
                     <Star
                         key={i}
                         className={`h-3 w-3 ${
-                            i < Math.floor(rating / 2)
+                            i < Math.floor(rating)
                                 ? "text-yellow-400 fill-current"
                                 : "text-gray-300"
                         }`}
@@ -139,7 +139,7 @@ export function ReviewManagementWidget({
     };
 
     const pendingCount = reviews.filter(
-        (r) => !r.isApproved && r.status === "published"
+        (r) => !r.isApproved && r.status === "pending"
     ).length;
     const approvedCount = reviews.filter((r) => r.isApproved).length;
     const rejectedCount = reviews.filter((r) => r.status === "rejected").length;
@@ -157,12 +157,20 @@ export function ReviewManagementWidget({
                             Approve reviews for public display
                         </p>
                     </div>
-                    <Link href="/dashboard/reviews">
-                        <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-2" />
-                            View All
-                        </Button>
-                    </Link>
+                    <div className="flex items-center gap-2">
+                        <Link href="/dashboard/properties">
+                            <Button variant="outline" size="sm">
+                                <ArrowRight className="h-4 w-4 mr-2" />
+                                Properties
+                            </Button>
+                        </Link>
+                        <Link href="/dashboard/reviews">
+                            <Button variant="outline" size="sm">
+                                <Eye className="h-4 w-4 mr-2" />
+                                View All
+                            </Button>
+                        </Link>
+                    </div>
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">

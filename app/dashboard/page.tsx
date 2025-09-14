@@ -37,7 +37,7 @@ import Link from "next/link";
 import type { NormalizedReview } from "@/types/review";
 
 export default function ManagerDashboard() {
-    const [timeRange, setTimeRange] = useState("30d");
+    const [timeRange, setTimeRange] = useState("all");
     const [activeTab, setActiveTab] = useState("overview");
     const [reviews, setReviews] = useState<NormalizedReview[]>([]);
     const [loading, setLoading] = useState(true);
@@ -83,7 +83,7 @@ export default function ManagerDashboard() {
                 // If using demo data, recalculate review counts from actual review data
                 if (usingDemoData && statsData.success) {
                     const pendingCount = processedReviews.filter(
-                        (r: any) => !r.isApproved && r.status === "published"
+                        (r: any) => !r.isApproved && r.status === "pending"
                     ).length;
                     const approvedCount = processedReviews.filter(
                         (r: any) => r.isApproved
@@ -131,7 +131,7 @@ export default function ManagerDashboard() {
 
                     // Calculate stats from demo reviews
                     const pendingCount = processedReviews.filter(
-                        (r: any) => !r.isApproved && r.status === "published"
+                        (r: any) => !r.isApproved && r.status === "pending"
                     ).length;
                     const approvedCount = processedReviews.filter(
                         (r: any) => r.isApproved
@@ -228,6 +228,18 @@ export default function ManagerDashboard() {
             label: "View Analytics",
             color: "bg-purple-500",
             href: "/dashboard/analytics",
+        },
+        {
+            icon: Home,
+            label: "Property Performance",
+            color: "bg-blue-500",
+            href: "/dashboard/properties",
+        },
+        {
+            icon: Users,
+            label: "Public Reviews",
+            color: "bg-indigo-500",
+            href: "/dashboard/public-reviews",
         },
     ];
 

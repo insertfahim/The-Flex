@@ -10,7 +10,7 @@ export function generateReviewAnalytics(
               totalReviews
             : 0;
 
-    // Rating distribution (1-10 scale, grouped for better visualization)
+    // Rating distribution (1-5 scale, grouped for better visualization)
     const ratingDistribution: { [key: number]: number } = {};
 
     // Group ratings into ranges for better visualization
@@ -19,8 +19,8 @@ export function generateReviewAnalytics(
         ratingDistribution[rating] = (ratingDistribution[rating] || 0) + 1;
     });
 
-    // Ensure all rating levels are represented (1-10)
-    for (let i = 1; i <= 10; i++) {
+    // Ensure all rating levels are represented (1-5)
+    for (let i = 1; i <= 5; i++) {
         if (!ratingDistribution[i]) {
             ratingDistribution[i] = 0;
         }
@@ -303,7 +303,9 @@ export function generatePerformanceAlerts(
     }
 
     // Check for pending reviews needing attention
-    const pendingReviews = reviews.filter((r) => r.status === "pending");
+    const pendingReviews = reviews.filter(
+        (r) => !r.isApproved && r.status === "pending"
+    );
     if (pendingReviews.length > 2) {
         alerts.push({
             type: "info",

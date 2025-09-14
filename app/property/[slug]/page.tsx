@@ -2,6 +2,7 @@
 
 import { FlexHeader } from "@/components/flex-header";
 import { PublicReviewsSection } from "@/components/public-reviews-section";
+import { PropertiesMap } from "@/components/properties-map";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -571,11 +572,15 @@ export default function PropertyPage({ params }: PropertyPageProps) {
                         <h2 className="text-3xl font-bold text-gray-900 mb-8">
                             Location
                         </h2>
-                        <div className="bg-gray-100 rounded-xl h-96 flex items-center justify-center">
-                            <p className="text-gray-600">
-                                Interactive map would be displayed here
-                            </p>
-                        </div>
+                        {property && (
+                            <PropertiesMap
+                                properties={[property]}
+                                className="border border-gray-200"
+                                height="400px"
+                                showControls={true}
+                                zoom={15}
+                            />
+                        )}
                         <div className="mt-6">
                             <h3 className="text-xl font-semibold text-gray-900 mb-4">
                                 About the neighborhood

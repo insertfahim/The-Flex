@@ -46,6 +46,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ManagerDashboard() {
     const [timeRange, setTimeRange] = useState("30d");
@@ -114,7 +115,7 @@ export default function ManagerDashboard() {
                 "Absolutely fantastic stay! The property was immaculate and the location perfect.",
             date: "2 hours ago",
             status: "approved",
-            avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face",
+            avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face",
         },
         {
             id: 2,
@@ -141,18 +142,25 @@ export default function ManagerDashboard() {
     ];
 
     const quickActions = [
-        { icon: Plus, label: "Add Property", color: "bg-blue-500" },
+        { icon: Plus, label: "Add Property", color: "bg-blue-500", href: "#" },
         {
             icon: MessageSquare,
-            label: "Respond to Reviews",
+            label: "Manage Reviews",
             color: "bg-green-500",
+            href: "/dashboard/reviews",
         },
         {
             icon: Calendar,
             label: "Schedule Maintenance",
             color: "bg-orange-500",
+            href: "#",
         },
-        { icon: BarChart3, label: "Generate Report", color: "bg-purple-500" },
+        {
+            icon: BarChart3,
+            label: "View Analytics",
+            color: "bg-purple-500",
+            href: "/dashboard/analytics",
+        },
     ];
 
     return (
@@ -420,21 +428,20 @@ export default function ManagerDashboard() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {quickActions.map((action, index) => (
-                            <Card
-                                key={index}
-                                className="bg-white shadow-lg border-0 hover:shadow-xl transition-shadow cursor-pointer"
-                            >
-                                <CardContent className="p-6 text-center">
-                                    <div
-                                        className={`inline-flex p-3 rounded-full ${action.color} mb-4`}
-                                    >
-                                        <action.icon className="h-6 w-6 text-white" />
-                                    </div>
-                                    <h3 className="font-semibold text-gray-900">
-                                        {action.label}
-                                    </h3>
-                                </CardContent>
-                            </Card>
+                            <Link key={index} href={action.href}>
+                                <Card className="bg-white shadow-lg border-0 hover:shadow-xl transition-shadow cursor-pointer">
+                                    <CardContent className="p-6 text-center">
+                                        <div
+                                            className={`inline-flex p-3 rounded-full ${action.color} mb-4`}
+                                        >
+                                            <action.icon className="h-6 w-6 text-white" />
+                                        </div>
+                                        <h3 className="font-semibold text-gray-900">
+                                            {action.label}
+                                        </h3>
+                                    </CardContent>
+                                </Card>
+                            </Link>
                         ))}
                     </div>
                 </div>

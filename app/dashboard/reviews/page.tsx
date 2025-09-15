@@ -36,6 +36,96 @@ export default function ReviewsManagementPage() {
     const [error, setError] = useState<string | null>(null);
     const [filters, setFilters] = useState<ReviewFiltersType>({});
     const [refreshing, setRefreshing] = useState(false);
+    const [exporting, setExporting] = useState(false);
+    const [exportMessage, setExportMessage] = useState<string | null>(null);
+
+    // Handle review export to CSV
+    const handleExportReviews = async () => {
+        setExporting(true);
+        setExportMessage(null);
+        try {
+            const dataToExport =
+                filteredReviews.length > 0 ? filteredReviews : reviews;
+
+            if (dataToExport.length === 0) {
+                setExportMessage("No reviews available to export.");
+                setTimeout(() => setExportMessage(null), 3000);
+                return;
+            }
+
+            // Create CSV headers
+            const headers = [
+                "Guest Name",
+                "Property",
+                "Overall Rating",
+                "Review",
+                "Channel",
+                "Status",
+                "Approved",
+                "Cleanliness",
+                "Communication",
+                "Location",
+                "Check-in",
+                "Accuracy",
+                "Value",
+                "Submitted Date",
+                "Manager Notes",
+            ];
+
+            // Convert reviews to CSV format
+            const csvContent = [
+                headers.join(","),
+                ...dataToExport.map((review) =>
+                    [
+                        `"${review.guestName || ""}"`,
+                        `"${review.listingName || ""}"`,
+                        review.overallRating || "",
+                        `"${(review.review || "").replace(/"/g, '""')}"`,
+                        review.channel || "",
+                        review.status || "",
+                        review.isApproved ? "Yes" : "No",
+                        review.categories?.cleanliness || "",
+                        review.categories?.communication || "",
+                        review.categories?.location || "",
+                        review.categories?.checkin || "",
+                        review.categories?.accuracy || "",
+                        review.categories?.value || "",
+                        review.submittedAt
+                            ? new Date(review.submittedAt).toLocaleDateString()
+                            : "",
+                        `"${(review.managerNotes || "").replace(/"/g, '""')}"`,
+                    ].join(",")
+                ),
+            ].join("\n");
+
+            // Create and download file
+            const blob = new Blob([csvContent], {
+                type: "text/csv;charset=utf-8;",
+            });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute(
+                "download",
+                `flex-reviews-${new Date().toISOString().split("T")[0]}.csv`
+            );
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            setExportMessage(
+                `Successfully exported ${dataToExport.length} reviews!`
+            );
+            setTimeout(() => setExportMessage(null), 3000);
+        } catch (error) {
+            console.error("Error exporting reviews:", error);
+            setExportMessage("Failed to export reviews. Please try again.");
+            setTimeout(() => setExportMessage(null), 3000);
+        } finally {
+            setExporting(false);
+        }
+    };
 
     // Fetch reviews
     const fetchReviews = async () => {
@@ -461,13 +551,34 @@ export default function ReviewsManagementPage() {
                                 </Link>
                                 <Button
                                     variant="outline"
+                                    onClick={handleExportReviews}
+                                    disabled={exporting}
                                     className="border-[#284E4C]/20 text-[#5C5C5A] hover:bg-[#284E4C] hover:text-white shadow-sm hover:shadow-lg transition-all duration-200"
                                 >
-                                    <Download className="h-4 w-4 mr-2" />
-                                    Export Reviews
+                                    {exporting ? (
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                    ) : (
+                                        <Download className="h-4 w-4 mr-2" />
+                                    )}
+                                    {exporting
+                                        ? "Exporting..."
+                                        : "Export Reviews"}
                                 </Button>
                             </div>
                         </div>
+                        {exportMessage && (
+                            <div
+                                className={`mt-4 p-3 rounded-lg text-sm ${
+                                    exportMessage.includes("Successfully")
+                                        ? "bg-green-50 text-green-700 border border-green-200"
+                                        : exportMessage.includes("Failed")
+                                        ? "bg-red-50 text-red-700 border border-red-200"
+                                        : "bg-yellow-50 text-yellow-700 border border-yellow-200"
+                                }`}
+                            >
+                                {exportMessage}
+                            </div>
+                        )}
                     </div>
 
                     {/* Filters */}

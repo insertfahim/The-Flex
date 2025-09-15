@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, ReviewChannel, ReviewStatus } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -574,6 +574,12 @@ const reviews = [
 async function main() {
     console.log("🌱 Seeding database...");
 
+    // Clear existing data
+    console.log("🧹 Clearing existing data...");
+    await prisma.review.deleteMany({});
+    await prisma.property.deleteMany({});
+    console.log("✅ Cleared existing data");
+
     // Create properties
     const createdProperties = [];
     for (const propertyData of properties) {
@@ -596,6 +602,8 @@ async function main() {
             data: {
                 ...reviewWithoutSlug,
                 propertyId: property.id,
+                channel: reviewWithoutSlug.channel as ReviewChannel,
+                status: reviewWithoutSlug.status as ReviewStatus,
             },
         });
         console.log(

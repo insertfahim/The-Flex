@@ -115,9 +115,9 @@ Configure your `.env.local`:
 # Database
 DATABASE_URL="postgresql://username:password@localhost:5432/flex_reviews"
 
-# Hostaway API (Assessment Credentials)
-HOSTAWAY_API_KEY="f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152"
-HOSTAWAY_ACCOUNT_ID="61148"
+# Hostaway API (Assessment Credentials - Provided by Flex Living)
+HOSTAWAY_API_KEY="your_provided_api_key"
+HOSTAWAY_ACCOUNT_ID="your_provided_account_id"
 
 # Mapbox
 NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your_mapbox_token"

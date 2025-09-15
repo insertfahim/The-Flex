@@ -2,6 +2,12 @@
 
 A comprehensive reviews management dashboard built for Flex Living's developer assessment. This application helps property managers assess performance based on guest reviews, manage public review displays, and gain insights into property performance trends.A comprehensive reviews management dashboard built for Flex Living's developer assessment. This application helps property managers assess performance based on guest reviews, manage public review displays, and gain insights into property performance trends.
 
+## 🔗 Live Demo & Repository## 🔗 Live Demo & Repository
+
+-   **🌐 Live Application**: [https://the-flex.fahimbuilds.me/](https://the-flex.fahimbuilds.me/)- **🌐 Live Application**: [https://the-flex.fahimbuilds.me/](https://the-flex.fahimbuilds.me/)
+
+-   **📁 GitHub Repository**: [https://github.com/insertfahim/The-Flex](https://github.com/insertfahim/The-Flex)- **📁 GitHub Repository**: [https://github.com/insertfahim/The-Flex](https://github.com/insertfahim/The-Flex)
+
 ## 📋 Project Overview## 📋 Project Overview
 
 This project was developed as part of the Flex Living developer assessment, implementing a complete reviews management system that integrates with external APIs, provides analytical insights, and manages public review displays.This project was developed as part of the Flex Living developer assessment, implementing a complete reviews management system that integrates with external APIs, provides analytical insights, and manages public review displays.
@@ -18,288 +24,561 @@ This project was developed as part of the Flex Living developer assessment, impl
 
 ## 🚀 Features## 🚀 Features
 
-### Manager Dashboard### Manager Dashboard
+### Manager Dashboard### Manager Dashboard### Manager Dashboard
 
 -   **Property Performance Analytics**: Comprehensive metrics and KPIs for each property
 
 -   **Review Management**: Filter, sort, and approve reviews for public display- **Property Performance Analytics**: Comprehensive metrics and KPIs for each property
 
--   **Trend Analysis**: Identify patterns and recurring issues across properties- **Review Management**: Filter, sort, and approve reviews for public display
+-   **Trend Analysis**: Identify patterns and recurring issues across properties
 
--   **Bulk Operations**: Efficiently manage multiple reviews simultaneously- **Trend Analysis**: Identify patterns and recurring issues across properties
-
--   **Performance Alerts**: Automated notifications for underperforming properties- **Bulk Operations**: Efficiently manage multiple reviews simultaneously
+-   **Bulk Operations**: Efficiently manage multiple reviews simultaneously- **Review Management**: Filter, sort, and approve reviews for public display- **Property Performance Analytics**: Comprehensive metrics and KPIs for each property
 
 -   **Performance Alerts**: Automated notifications for underperforming properties
 
+-   **Trend Analysis**: Identify patterns and recurring issues across properties- **Review Management**: Filter, sort, and approve reviews for public display
+
 ### Public Review Display
 
--   **Flex Living Style Integration**: Seamlessly integrated with property detail pages### Public Review Display
+-   **Flex Living Style Integration**: Seamlessly integrated with property detail pages- **Bulk Operations**: Efficiently manage multiple reviews simultaneously- **Trend Analysis**: Identify patterns and recurring issues across properties
 
 -   **Approved Reviews Only**: Only manager-approved reviews are displayed publicly
 
--   **Responsive Design**: Optimized for all device sizes- **Flex Living Style Integration**: Seamlessly integrated with property detail pages
+-   **Responsive Design**: Optimized for all device sizes- **Performance Alerts**: Automated notifications for underperforming properties- **Bulk Operations**: Efficiently manage multiple reviews simultaneously
 
--   **Interactive Filtering**: Guests can filter reviews by rating and category- **Approved Reviews Only**: Only manager-approved reviews are displayed publicly
+-   **Interactive Filtering**: Guests can filter reviews by rating and category
 
--   **Responsive Design**: Optimized for all device sizes
+-   **Performance Alerts**: Automated notifications for underperforming properties
 
-### API Integration- **Interactive Filtering**: Guests can filter reviews by rating and category
+### API Integration
 
--   **Hostaway Reviews API**: Full integration with data normalization
-
--   **Real-time Sync**: Automatic review data synchronization### API Integration
-
--   **Error Handling**: Robust error handling and retry mechanisms
-
--   **Mock Data Support**: Comprehensive mock data for development and testing- **Hostaway Reviews API**: Full integration with data normalization
+-   **Hostaway Reviews API**: Full integration with data normalization### Public Review Display
 
 -   **Real-time Sync**: Automatic review data synchronization
 
-## 🛠 Tech Stack- **Error Handling**: Robust error handling and retry mechanisms
+-   **Error Handling**: Robust error handling and retry mechanisms- **Flex Living Style Integration**: Seamlessly integrated with property detail pages### Public Review Display
 
 -   **Mock Data Support**: Comprehensive mock data for development and testing
 
+-   **Approved Reviews Only**: Only manager-approved reviews are displayed publicly
+
+## 🛠 Tech Stack
+
+-   **Responsive Design**: Optimized for all device sizes- **Flex Living Style Integration**: Seamlessly integrated with property detail pages
+
 -   **Framework**: Next.js 14 with App Router
 
--   **Language**: TypeScript## � Tech Stack
+-   **Language**: TypeScript- **Interactive Filtering**: Guests can filter reviews by rating and category- **Approved Reviews Only**: Only manager-approved reviews are displayed publicly
 
 -   **Styling**: Tailwind CSS + Radix UI Components
 
--   **Database**: PostgreSQL with Prisma ORM- **Framework**: Next.js 14 with App Router
+-   **Database**: PostgreSQL with Prisma ORM- **Responsive Design**: Optimized for all device sizes
 
--   **Maps**: Mapbox GL JS (chosen over Google Places API)- **Language**: TypeScript
+-   **Maps**: Mapbox GL JS (chosen over Google Places API)
 
--   **State Management**: React Hooks + Context API- **Styling**: Tailwind CSS + Radix UI Components
-
--   **API Integration**: Custom API routes with data normalization- **Database**: PostgreSQL with Prisma ORM
-
--   **Authentication**: NextAuth.js- **Maps**: Mapbox GL JS (chosen over Google Places API)
-
--   **Analytics**: Custom analytics dashboard + Vercel Analytics- **State Management**: React Hooks + Context API
+-   **State Management**: React Hooks + Context API### API Integration- **Interactive Filtering**: Guests can filter reviews by rating and category
 
 -   **API Integration**: Custom API routes with data normalization
 
-### Why Mapbox Instead of Google Places API?- **Authentication**: NextAuth.js
+-   **Authentication**: NextAuth.js- **Hostaway Reviews API**: Full integration with data normalization
 
 -   **Analytics**: Custom analytics dashboard + Vercel Analytics
 
+-   **Real-time Sync**: Automatic review data synchronization### API Integration
+
+### Why Mapbox Instead of Google Places API?
+
+-   **Error Handling**: Robust error handling and retry mechanisms
+
 Mapbox was chosen over Google Places API due to:
 
--   **No Credit Card Requirement**: Google Cloud Console requires credit card verification for API activation### Why Mapbox Instead of Google Places API?
+-   **No Credit Card Requirement**: Google Cloud Console requires credit card verification for API activation- **Mock Data Support**: Comprehensive mock data for development and testing- **Hostaway Reviews API**: Full integration with data normalization
 
 -   **Developer-Friendly**: More straightforward setup process for assessment purposes
 
--   **Feature Parity**: Provides all required mapping functionality for the projectMapbox was chosen over Google Places API due to:
+-   **Feature Parity**: Provides all required mapping functionality for the project- **Real-time Sync**: Automatic review data synchronization
 
 -   **Cost Effective**: Better pricing structure for development and testing
 
--   **No Credit Card Requirement**: Google Cloud Console requires credit card verification for API activation
+## 🛠 Tech Stack- **Error Handling**: Robust error handling and retry mechanisms
 
-## 📊 Key Design Decisions- **Developer-Friendly**: More straightforward setup process for assessment purposes
+## 📊 Key Design Decisions
 
--   **Feature Parity**: Provides all required mapping functionality for the project
-
-### Data Architecture- **Cost Effective**: Better pricing structure for development and testing
-
--   **Normalized Review Structure**: Standardized format across different review sources
-
--   **Property Performance Metrics**: Calculated fields for quick dashboard insights## 📊 Key Design Decisions
-
--   **Approval Workflow**: Clear separation between internal and public-facing reviews
+-   **Mock Data Support**: Comprehensive mock data for development and testing
 
 ### Data Architecture
 
-### UX/UI Approach
+-   **Normalized Review Structure**: Standardized format across different review sources- **Framework**: Next.js 14 with App Router
 
--   **Product Manager Mindset**: Designed with actual property manager workflows in mind- **Normalized Review Structure**: Standardized format across different review sources
+-   **Property Performance Metrics**: Calculated fields for quick dashboard insights
 
--   **Progressive Disclosure**: Complex features accessible but not overwhelming- **Property Performance Metrics**: Calculated fields for quick dashboard insights
+-   **Approval Workflow**: Clear separation between internal and public-facing reviews- **Language**: TypeScript## � Tech Stack
 
--   **Mobile-First**: Responsive design ensuring usability across devices- **Approval Workflow**: Clear separation between internal and public-facing reviews
+### UX/UI Approach- **Styling**: Tailwind CSS + Radix UI Components
 
--   **Accessibility**: WCAG compliant components and keyboard navigation
+-   **Product Manager Mindset**: Designed with actual property manager workflows in mind
 
-### UX/UI Approach
+-   **Progressive Disclosure**: Complex features accessible but not overwhelming- **Database**: PostgreSQL with Prisma ORM- **Framework**: Next.js 14 with App Router
 
-### API Design
+-   **Mobile-First**: Responsive design ensuring usability across devices
 
--   **RESTful Structure**: Clear, predictable API endpoints- **Product Manager Mindset**: Designed with actual property manager workflows in mind
+-   **Accessibility**: WCAG compliant components and keyboard navigation- **Maps**: Mapbox GL JS (chosen over Google Places API)- **Language**: TypeScript
 
--   **Data Normalization**: Consistent response formats across different sources- **Progressive Disclosure**: Complex features accessible but not overwhelming
+### API Design- **State Management**: React Hooks + Context API- **Styling**: Tailwind CSS + Radix UI Components
 
--   **Error Handling**: Comprehensive error responses with actionable messages- **Mobile-First**: Responsive design ensuring usability across devices
+-   **RESTful Structure**: Clear, predictable API endpoints
 
--   **Performance Optimization**: Efficient queries and caching strategies- **Accessibility**: WCAG compliant components and keyboard navigation
+-   **Data Normalization**: Consistent response formats across different sources- **API Integration**: Custom API routes with data normalization- **Database**: PostgreSQL with Prisma ORM
 
-## 🔧 Installation & Setup### API Design
+-   **Error Handling**: Comprehensive error responses with actionable messages
 
-### Prerequisites- **RESTful Structure**: Clear, predictable API endpoints
+-   **Performance Optimization**: Efficient queries and caching strategies- **Authentication**: NextAuth.js- **Maps**: Mapbox GL JS (chosen over Google Places API)
 
--   Node.js 18+- **Data Normalization**: Consistent response formats across different sources
+## 🔧 Installation & Setup- **Analytics**: Custom analytics dashboard + Vercel Analytics- **State Management**: React Hooks + Context API
 
--   PostgreSQL database- **Error Handling**: Comprehensive error responses with actionable messages
+### Prerequisites- **API Integration**: Custom API routes with data normalization
 
--   Mapbox account (free tier available)- **Performance Optimization**: Efficient queries and caching strategies
+-   Node.js 18+
 
-### Quick Start## 🔧 Installation & Setup
+-   PostgreSQL database### Why Mapbox Instead of Google Places API?- **Authentication**: NextAuth.js
 
-1. **Clone and Install**### Prerequisites
+-   Mapbox account (free tier available)
 
-```bash
-
-git clone <repository-url>-   Node.js 18+
-
-cd flex-reviews-dashboard-   PostgreSQL database
-
-npm install-   Mapbox account (free tier available)
-
-```
+-   **Analytics**: Custom analytics dashboard + Vercel Analytics
 
 ### Quick Start
 
-2. **Environment Configuration**
+Mapbox was chosen over Google Places API due to:
 
-```````bash1. **Clone and Install**
+1. **Clone and Install**
 
-cp .env.example .env.local
+````bash- **No Credit Card Requirement**: Google Cloud Console requires credit card verification for API activation### Why Mapbox Instead of Google Places API?
 
-``````bash
+git clone https://github.com/insertfahim/The-Flex.git
 
-git clone <repository-url>
+cd The-Flex-   **Developer-Friendly**: More straightforward setup process for assessment purposes
 
-Configure your `.env.local`:cd flex-reviews-dashboard
+npm install
 
-```envnpm install
-
-# Database```
-
-DATABASE_URL="postgresql://username:password@localhost:5432/flex_reviews"
-
-2. **Environment Configuration**
-
-# Hostaway API (Assessment Credentials)
-
-HOSTAWAY_API_KEY="f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152"```bash
-
-HOSTAWAY_ACCOUNT_ID="61148"cp .env.example .env.local
-
-```````
-
-# Mapbox
-
-NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your_mapbox_token"Configure your `.env.local`:
-
-# NextAuth```env
-
-NEXTAUTH_SECRET="your_nextauth_secret"# Database
-
-NEXTAUTH_URL="http://localhost:3000"DATABASE_URL="postgresql://username:password@localhost:5432/flex_reviews"
-
-````
-
-# Hostaway API (Assessment Credentials)
-
-3. **Database Setup**HOSTAWAY_API_KEY="f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152"
-
-```bashHOSTAWAY_ACCOUNT_ID="61148"
-
-npx prisma migrate dev
-
-npx prisma db seed# Mapbox
-
-```NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your_mapbox_token"
+```-   **Feature Parity**: Provides all required mapping functionality for the projectMapbox was chosen over Google Places API due to:
 
 
 
-4. **Start Development Server**# NextAuth
-
-```bashNEXTAUTH_SECRET="your_nextauth_secret"
-
-npm run devNEXTAUTH_URL="http://localhost:3000"
-
-````
-
-Access the application at [http://localhost:3000](http://localhost:3000)3. **Database Setup**
-
-## 📚 API Documentation```bash
-
-npx prisma migrate dev
-
-### Core Endpoint: GET /api/reviews/hostawaynpx prisma db seed
-
-````
-
-**Purpose**: Fetches and normalizes reviews from Hostaway API
-
-4. **Start Development Server**
-
-**Implementation**: This route handles the complete data pipeline from Hostaway API to normalized application format.
+2. **Environment Configuration**-   **Cost Effective**: Better pricing structure for development and testing
 
 ```bash
 
-**Response Format**:npm run dev
+cp .env.example .env.local-   **No Credit Card Requirement**: Google Cloud Console requires credit card verification for API activation
 
-```json```
+````
+
+## 📊 Key Design Decisions- **Developer-Friendly**: More straightforward setup process for assessment purposes
+
+Configure your `.env.local`:
+
+````env- **Feature Parity**: Provides all required mapping functionality for the project
+
+# Database
+
+DATABASE_URL="postgresql://username:password@localhost:5432/flex_reviews"### Data Architecture- **Cost Effective**: Better pricing structure for development and testing
+
+
+
+# Hostaway API (Assessment Credentials)-   **Normalized Review Structure**: Standardized format across different review sources
+
+HOSTAWAY_API_KEY="f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152"
+
+HOSTAWAY_ACCOUNT_ID="61148"-   **Property Performance Metrics**: Calculated fields for quick dashboard insights## 📊 Key Design Decisions
+
+
+
+# Mapbox-   **Approval Workflow**: Clear separation between internal and public-facing reviews
+
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your_mapbox_token"
+
+### Data Architecture
+
+# NextAuth
+
+NEXTAUTH_SECRET="your_nextauth_secret"### UX/UI Approach
+
+NEXTAUTH_URL="http://localhost:3000"
+
+```-   **Product Manager Mindset**: Designed with actual property manager workflows in mind- **Normalized Review Structure**: Standardized format across different review sources
+
+
+
+3. **Database Setup**-   **Progressive Disclosure**: Complex features accessible but not overwhelming- **Property Performance Metrics**: Calculated fields for quick dashboard insights
+
+```bash
+
+npx prisma migrate dev-   **Mobile-First**: Responsive design ensuring usability across devices- **Approval Workflow**: Clear separation between internal and public-facing reviews
+
+npx prisma db seed
+
+```-   **Accessibility**: WCAG compliant components and keyboard navigation
+
+
+
+4. **Start Development Server**### UX/UI Approach
+
+```bash
+
+npm run dev### API Design
+
+````
+
+-   **RESTful Structure**: Clear, predictable API endpoints- **Product Manager Mindset**: Designed with actual property manager workflows in mind
+
+Access the application at [http://localhost:3000](http://localhost:3000)
+
+-   **Data Normalization**: Consistent response formats across different sources- **Progressive Disclosure**: Complex features accessible but not overwhelming
+
+## 📚 API Documentation
+
+-   **Error Handling**: Comprehensive error responses with actionable messages- **Mobile-First**: Responsive design ensuring usability across devices
+
+### Core Endpoint: GET /api/reviews/hostaway
+
+-   **Performance Optimization**: Efficient queries and caching strategies- **Accessibility**: WCAG compliant components and keyboard navigation
+
+**Purpose**: Fetches and normalizes reviews from Hostaway API
+
+## 🔧 Installation & Setup### API Design
+
+**Implementation**: This route handles the complete data pipeline from Hostaway API to normalized application format.
+
+### Prerequisites- **RESTful Structure**: Clear, predictable API endpoints
+
+**Response Format**:
+
+````````json- Node.js 18+- **Data Normalization**: Consistent response formats across different sources
 
 {
 
-  "status": "success",Access the application at [http://localhost:3000](http://localhost:3000)
+  "status": "success",-   PostgreSQL database- **Error Handling**: Comprehensive error responses with actionable messages
 
   "data": [
 
-    {## 📚 API Documentation
+    {-   Mapbox account (free tier available)- **Performance Optimization**: Efficient queries and caching strategies
 
       "id": "7453",
 
-      "type": "host-to-guest",### Core Endpoint: GET /api/reviews/hostaway
+      "type": "host-to-guest",### Quick Start## 🔧 Installation & Setup
 
       "rating": 8.7,
 
-      "content": "Shane and family are wonderful! Would definitely host again :)",**Purpose**: Fetches and normalizes reviews from Hostaway API
+      "content": "Shane and family are wonderful! Would definitely host again :)",1. **Clone and Install**### Prerequisites
 
       "categories": [
 
-        {**Implementation**: This route handles the complete data pipeline from Hostaway API to normalized application format.
+        {```bash
 
           "category": "cleanliness",
 
-          "rating": 10**Response Format**:
+          "rating": 10git clone <repository-url>-   Node.js 18+
 
         },
 
-        {```json
+        {cd flex-reviews-dashboard-   PostgreSQL database
+
+          "category": "communication",
+
+          "rating": 10npm install-   Mapbox account (free tier available)
+
+        },
+
+        {```
+
+          "category": "respect_house_rules",
+
+          "rating": 10### Quick Start
+
+        }
+
+      ],2. **Environment Configuration**
+
+      "submittedAt": "2020-08-21T22:45:14Z",
+
+      "guestName": "Shane Finkelstein",```````bash1. **Clone and Install**
+
+      "propertyName": "2B N1 A - 29 Shoreditch Heights",
+
+      "isApproved": false,cp .env.example .env.local
+
+      "channel": "hostaway"
+
+    }``````bash
+
+  ],
+
+  "meta": {git clone <repository-url>
+
+    "total": 1,
+
+    "page": 1,Configure your `.env.local`:cd flex-reviews-dashboard
+
+    "limit": 50
+
+  }```envnpm install
+
+}
+
+```# Database```
+
+
+
+### Additional API RoutesDATABASE_URL="postgresql://username:password@localhost:5432/flex_reviews"
+
+
+
+- **POST /api/reviews/[id]/approve** - Approve review for public display2. **Environment Configuration**
+
+- **POST /api/reviews/[id]/reject** - Reject review from public display
+
+- **GET /api/properties** - List properties with review statistics# Hostaway API (Assessment Credentials)
+
+- **GET /api/analytics/dashboard** - Dashboard analytics data
+
+- **GET /api/reviews/public/[propertyId]** - Public reviews for property pageHOSTAWAY_API_KEY="f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152"```bash
+
+
+
+## 🎯 Assessment Features DemonstrationHOSTAWAY_ACCOUNT_ID="61148"cp .env.example .env.local
+
+
+
+### Hostaway Integration```````
+
+- ✅ API integration with provided credentials (Account ID: 61148)
+
+- ✅ Mock data implementation for development# Mapbox
+
+- ✅ Data normalization and processing
+
+- ✅ Error handling for API failuresNEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your_mapbox_token"Configure your `.env.local`:
+
+
+
+### Manager Dashboard Capabilities# NextAuth```env
+
+- ✅ Property performance overview with key metrics
+
+- ✅ Advanced filtering (rating, category, channel, date)NEXTAUTH_SECRET="your_nextauth_secret"# Database
+
+- ✅ Trend analysis and recurring issue identification
+
+- ✅ Review approval workflowNEXTAUTH_URL="http://localhost:3000"DATABASE_URL="postgresql://username:password@localhost:5432/flex_reviews"
+
+- ✅ Intuitive, product-manager-focused design
+
+````````
+
+### Review Display Integration
+
+-   ✅ Consistent Flex Living styling# Hostaway API (Assessment Credentials)
+
+-   ✅ Approved-only review display
+
+-   ✅ Responsive design implementation3. **Database Setup**HOSTAWAY_API_KEY="f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152"
+
+-   ✅ SEO-optimized review content
+
+````bashHOSTAWAY_ACCOUNT_ID="61148"
+
+### Maps Integration Analysis
+
+- ✅ Mapbox implementation completednpx prisma migrate dev
+
+- ❌ Google Places API not implemented (credit card requirement)
+
+- 📋 **Findings**: While Google Places API offers robust review data, the credit card verification requirement for Google Cloud Console API activation made it impractical for this assessment. Mapbox provides excellent mapping capabilities and property visualization features that meet the project requirements.npx prisma db seed# Mapbox
+
+
+
+## 🏗 Project Structure```NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN="your_mapbox_token"
+
+
+
+````
+
+├── app/ # Next.js App Router
+
+│ ├── api/reviews/hostaway/ # Hostaway API integration4. **Start Development Server**# NextAuth
+
+│ ├── dashboard/ # Manager dashboard
+
+│ ├── properties/[id]/ # Public property pages```bashNEXTAUTH_SECRET="your_nextauth_secret"
+
+│ └── globals.css # Global styles
+
+├── components/ # React componentsnpm run devNEXTAUTH_URL="http://localhost:3000"
+
+│ ├── analytics-dashboard.tsx # Dashboard analytics
+
+│ ├── review-management-widget.tsx # Review approval interface````
+
+│ ├── property-performance.tsx # Property metrics
+
+│ └── ui/ # Reusable UI componentsAccess the application at [http://localhost:3000](http://localhost:3000)3. **Database Setup**
+
+├── lib/ # Core utilities
+
+│ ├── hostaway-api.ts # Hostaway integration## 📚 API Documentation```bash
+
+│ ├── review-analytics.ts # Analytics calculations
+
+│ └── db.ts # Database configurationnpx prisma migrate dev
+
+├── types/ # TypeScript definitions
+
+├── data/ # Mock data and fixtures### Core Endpoint: GET /api/reviews/hostawaynpx prisma db seed
+
+└── prisma/ # Database schema
+
+`````
+
+
+
+## 🚀 Deployment**Purpose**: Fetches and normalizes reviews from Hostaway API
+
+
+
+The application is deployed on Vercel and accessible at: **[https://the-flex.fahimbuilds.me/](https://the-flex.fahimbuilds.me/)**4. **Start Development Server**
+
+
+
+### Production Build**Implementation**: This route handles the complete data pipeline from Hostaway API to normalized application format.
+
+```bash
+
+npm run build```bash
+
+npm start
+
+```**Response Format**:npm run dev
+
+
+
+### Vercel Deployment (Recommended)```json```
+
+1. Connect repository to Vercel
+
+2. Configure environment variables{
+
+3. Automatic deployment on push to main
+
+  "status": "success",Access the application at [http://localhost:3000](http://localhost:3000)
+
+### Docker Support
+
+```bash  "data": [
+
+docker build -t flex-reviews-dashboard .
+
+docker run -p 3000:3000 flex-reviews-dashboard    {## 📚 API Documentation
+
+```
+
+      "id": "7453",
+
+## 📈 Performance & Analytics
+
+      "type": "host-to-guest",### Core Endpoint: GET /api/reviews/hostaway
+
+- **Database Optimization**: Indexed queries for fast dashboard loading
+
+- **API Caching**: Strategic caching for external API calls      "rating": 8.7,
+
+- **Code Splitting**: Optimized bundle sizes with Next.js
+
+- **SEO Ready**: Meta tags and structured data for public pages      "content": "Shane and family are wonderful! Would definitely host again :)",**Purpose**: Fetches and normalizes reviews from Hostaway API
+
+
+
+## 🧪 Testing      "categories": [
+
+
+
+```bash        {**Implementation**: This route handles the complete data pipeline from Hostaway API to normalized application format.
+
+# Run all tests
+
+npm test          "category": "cleanliness",
+
+
+
+# Run tests in watch mode          "rating": 10**Response Format**:
+
+npm run test:watch
+
+        },
+
+# Generate coverage report
+
+npm run test:coverage        {```json
+
+```
 
           "category": "communication", {
 
+## 📝 Documentation
+
           "rating": 10    "status": "success",
 
-        },    "data": [
+- **Setup Instructions**: Complete environment and deployment guide
 
-        {        {
+- **API Documentation**: Comprehensive endpoint documentation        },    "data": [
 
-          "category": "respect_house_rules",            "id": "7453",
+- **Component Library**: Documented UI components with examples
 
-          "rating": 10            "type": "host-to-guest",
+- **Database Schema**: Entity relationship diagrams and field descriptions        {        {
 
-        }            "rating": 8.7,
 
-      ],            "content": "Shane and family are wonderful! Would definitely host again :)",
+
+## 🤝 Assessment Deliverables          "category": "respect_house_rules",            "id": "7453",
+
+
+
+✅ **Source Code**: Complete frontend and backend implementation            "rating": 10            "type": "host-to-guest",
+
+✅ **Running Version**: Functional application with setup instructions
+
+✅ **Documentation**: Comprehensive README with technical decisions          }            "rating": 8.7,
+
+✅ **API Implementation**: Required `/api/reviews/hostaway` endpoint
+
+✅ **Hostaway Integration**: Full integration with provided credentials        ],            "content": "Shane and family are wonderful! Would definitely host again :)",
+
+✅ **Maps Analysis**: Mapbox implementation with Google Places findings
 
       "submittedAt": "2020-08-21T22:45:14Z",            "categories": [
 
+## 📞 Support & Contact
+
       "guestName": "Shane Finkelstein",                {
 
-      "propertyName": "2B N1 A - 29 Shoreditch Heights",                    "category": "cleanliness",
+For questions regarding this assessment implementation:
 
-      "isApproved": false,                    "rating": 10
+- Create an issue in this repository      "propertyName": "2B N1 A - 29 Shoreditch Heights",                    "category": "cleanliness",
 
-      "channel": "hostaway"                },
+- Review the comprehensive documentation in `/docs`
 
-    }                {
+- Check the setup instructions in `SETUP_INSTRUCTIONS.md`      "isApproved": false,                    "rating": 10
 
-  ],                    "category": "communication",
 
+
+---      "channel": "hostaway"                },
+
+
+
+**Assessment Completed By**: Tasnimul Mohammad Fahim      }                {
+
+**Submission Date**: September 15, 2025
+
+**Tech Stack**: Next.js 14, TypeScript, PostgreSQL, Mapbox    ],                    "category": "communication",
+
+**Status**: Ready for Review ✅
   "meta": {                    "rating": 10
 
     "total": 1,                },
@@ -802,3 +1081,4 @@ The Google Reviews integration has been successfully explored and implemented:
 ---
 
 Built with ❤️ for Flex Living property management
+`````

@@ -83,7 +83,7 @@ export function ReviewFiltersComponent({
                             variant="outline"
                             size="sm"
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className="bg-white border-slate-300 text-slate-700 hover:bg-slate-50 transition-all duration-200"
+                            className="bg-white border-[#284E4C]/20 text-[#284E4C] hover:bg-[#284E4C] hover:text-white shadow-sm hover:shadow-lg transition-all duration-200"
                         >
                             {isExpanded ? "Hide Filters" : "Show Filters"}
                         </Button>
@@ -298,7 +298,7 @@ export function ReviewFiltersComponent({
                                 variant="ghost"
                                 size="sm"
                                 onClick={clearFilters}
-                                className="text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-medium"
+                                className="text-[#5C5C5A] hover:text-[#284E4C] hover:bg-[#FFF9E9] font-medium transition-all duration-200"
                             >
                                 Clear all filters
                             </Button>

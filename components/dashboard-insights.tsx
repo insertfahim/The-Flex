@@ -239,17 +239,24 @@ export function DashboardInsights({
                                     Performance Score
                                 </p>
                                 <p className="text-3xl font-bold">
-                                    {insights.performanceScore?.toFixed(0) ||
-                                        85}
+                                    {insights.performanceScore !== undefined
+                                        ? insights.performanceScore.toFixed(0)
+                                        : "0"}
                                 </p>
                                 <p className="text-xs opacity-75 mt-1">
-                                    Excellent
+                                    {insights.performanceScore >= 80
+                                        ? "Excellent"
+                                        : insights.performanceScore >= 60
+                                        ? "Good"
+                                        : insights.performanceScore >= 40
+                                        ? "Fair"
+                                        : "Needs Improvement"}
                                 </p>
                             </div>
                             <Target className="h-8 w-8 opacity-75" />
                         </div>
                         <Progress
-                            value={insights.performanceScore || 85}
+                            value={insights.performanceScore || 0}
                             className="mt-3 bg-white/20"
                         />
                     </CardContent>
@@ -290,9 +297,21 @@ export function DashboardInsights({
                             <Star className="h-8 w-8 text-yellow-500" />
                         </div>
                         <div className="flex items-center mt-2 text-sm">
-                            <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
-                            <span className="text-green-600">
-                                +0.2 vs previous period
+                            {insights.averageRating >= 4.0 ? (
+                                <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
+                            ) : (
+                                <TrendingDown className="h-3 w-3 text-red-600 mr-1" />
+                            )}
+                            <span
+                                className={
+                                    insights.averageRating >= 4.0
+                                        ? "text-green-600"
+                                        : "text-red-600"
+                                }
+                            >
+                                {insights.averageRating >= 4.0 ? "+" : ""}
+                                {(insights.averageRating - 4.0).toFixed(1)} vs
+                                target (4.0)
                             </span>
                         </div>
                     </CardContent>
@@ -308,7 +327,7 @@ export function DashboardInsights({
                                 <p className="text-2xl font-bold">
                                     £
                                     {insights.kpis?.revenue?.toLocaleString() ||
-                                        "45,230"}
+                                        "0"}
                                 </p>
                             </div>
                             <DollarSign className="h-8 w-8 text-green-600" />
@@ -316,7 +335,15 @@ export function DashboardInsights({
                         <div className="flex items-center mt-2 text-sm">
                             <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
                             <span className="text-green-600">
-                                +12% vs last month
+                                +
+                                {insights.kpis?.revenue > 45230
+                                    ? Math.round(
+                                          ((insights.kpis.revenue - 45230) /
+                                              45230) *
+                                              100
+                                      )
+                                    : 0}
+                                % vs last month
                             </span>
                         </div>
                     </CardContent>
@@ -330,13 +357,13 @@ export function DashboardInsights({
                                     Occupancy Rate
                                 </p>
                                 <p className="text-2xl font-bold">
-                                    {insights.kpis?.occupancyRate || 87}%
+                                    {insights.kpis?.occupancyRate || 0}%
                                 </p>
                             </div>
                             <Home className="h-8 w-8 text-blue-600" />
                         </div>
                         <Progress
-                            value={insights.kpis?.occupancyRate || 87}
+                            value={insights.kpis?.occupancyRate || 0}
                             className="mt-2"
                         />
                     </CardContent>
@@ -603,13 +630,25 @@ export function DashboardInsights({
                                                 cx="50%"
                                                 cy="50%"
                                                 labelLine={false}
-                                                label={(entry: any) =>
-                                                    `${entry.name} ${(
-                                                        (entry.value /
-                                                            insights.totalReviews) *
-                                                        100
-                                                    ).toFixed(0)}%`
-                                                }
+                                                label={(entry: any) => {
+                                                    // Calculate total from current data set (either real reviews or sample data)
+                                                    const totalFromData =
+                                                        insights.channelPerformance.reduce(
+                                                            (sum, item) =>
+                                                                sum +
+                                                                item.value,
+                                                            0
+                                                        );
+                                                    const percentage =
+                                                        totalFromData > 0
+                                                            ? (
+                                                                  (entry.value /
+                                                                      totalFromData) *
+                                                                  100
+                                                              ).toFixed(0)
+                                                            : "0";
+                                                    return `${entry.name} ${percentage}%`;
+                                                }}
                                                 outerRadius={80}
                                                 fill="#8884d8"
                                                 dataKey="value"

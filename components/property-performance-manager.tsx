@@ -789,7 +789,7 @@ export function PropertyPerformanceManager({
                     return (
                         <Card
                             key={property.id}
-                            className="overflow-hidden hover:shadow-lg transition-shadow"
+                            className="overflow-hidden hover:shadow-lg transition-shadow mb-4"
                         >
                             <div className="relative h-48">
                                 <Image
@@ -969,7 +969,7 @@ export function PropertyPerformanceManager({
                                                         >
                                                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                                                 <Card>
-                                                                    <CardContent className="p-4 text-center">
+                                                                    <CardContent className="p-4 flex flex-col items-center justify-center text-center">
                                                                         <div className="text-2xl font-bold text-[#284E4C]">
                                                                             {selectedProperty.averageRating.toFixed(
                                                                                 1
@@ -982,7 +982,7 @@ export function PropertyPerformanceManager({
                                                                     </CardContent>
                                                                 </Card>
                                                                 <Card>
-                                                                    <CardContent className="p-4 text-center">
+                                                                    <CardContent className="p-4 flex flex-col items-center justify-center text-center">
                                                                         <div className="text-2xl font-bold text-blue-600">
                                                                             {
                                                                                 selectedProperty.totalReviews
@@ -995,7 +995,7 @@ export function PropertyPerformanceManager({
                                                                     </CardContent>
                                                                 </Card>
                                                                 <Card>
-                                                                    <CardContent className="p-4 text-center">
+                                                                    <CardContent className="p-4 flex flex-col items-center justify-center text-center">
                                                                         <div className="text-2xl font-bold text-green-600">
                                                                             {
                                                                                 selectedProperty.occupancy
@@ -1008,7 +1008,7 @@ export function PropertyPerformanceManager({
                                                                     </CardContent>
                                                                 </Card>
                                                                 <Card>
-                                                                    <CardContent className="p-4 text-center">
+                                                                    <CardContent className="p-4 flex flex-col items-center justify-center text-center">
                                                                         <div className="text-2xl font-bold text-purple-600">
                                                                             {
                                                                                 selectedProperty.revenue

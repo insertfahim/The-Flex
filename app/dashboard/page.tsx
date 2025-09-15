@@ -164,6 +164,125 @@ export default function ManagerDashboard() {
 
     const fetchReviews = fetchData; // Keep for backward compatibility
 
+    // Export dashboard data as CSV
+    const exportDashboardData = () => {
+        try {
+            // Prepare dashboard summary data
+            const summaryData = [
+                ["Dashboard Summary", ""],
+                ["Export Date", new Date().toLocaleString()],
+                ["Time Range", timeRange === "all" ? "All Time" : timeRange],
+                ["", ""],
+                ["Metric", "Value"],
+                [
+                    "Total Revenue",
+                    `£${dashboardStats.totalRevenue.toLocaleString()}`,
+                ],
+                [
+                    "Revenue Change",
+                    `${dashboardStats.revenueChange > 0 ? "+" : ""}${
+                        dashboardStats.revenueChange
+                    }%`,
+                ],
+                ["Total Properties", dashboardStats.totalProperties.toString()],
+                [
+                    "Properties Change",
+                    `${dashboardStats.propertiesChange > 0 ? "+" : ""}${
+                        dashboardStats.propertiesChange
+                    }%`,
+                ],
+                ["Total Reviews", dashboardStats.totalReviews.toString()],
+                [
+                    "Reviews Change",
+                    `${dashboardStats.reviewsChange > 0 ? "+" : ""}${
+                        dashboardStats.reviewsChange
+                    }%`,
+                ],
+                [
+                    "Average Rating",
+                    `${dashboardStats.averageRating.toFixed(1)}/10`,
+                ],
+                [
+                    "Rating Change",
+                    `${
+                        dashboardStats.ratingChange > 0 ? "+" : ""
+                    }${dashboardStats.ratingChange.toFixed(1)}`,
+                ],
+                ["Occupancy Rate", `${dashboardStats.occupancyRate}%`],
+                [
+                    "Occupancy Change",
+                    `${dashboardStats.occupancyChange > 0 ? "+" : ""}${
+                        dashboardStats.occupancyChange
+                    }%`,
+                ],
+                ["Response Rate", `${dashboardStats.responseRate}%`],
+                [
+                    "Response Change",
+                    `${dashboardStats.responseChange > 0 ? "+" : ""}${
+                        dashboardStats.responseChange
+                    }%`,
+                ],
+                ["Pending Reviews", dashboardStats.pendingReviews.toString()],
+                ["Approved Reviews", dashboardStats.approvedReviews.toString()],
+            ];
+
+            // Convert summary to CSV
+            let csvContent = summaryData
+                .map((row) => row.map((field) => `"${field}"`).join(","))
+                .join("\n");
+
+            // Add reviews data if available
+            if (reviews.length > 0) {
+                csvContent += "\n\n";
+                csvContent += "Recent Reviews\n";
+                csvContent +=
+                    '"Property","Guest Name","Rating","Comment","Date","Status","Channel"\n';
+
+                reviews.slice(0, 100).forEach((review) => {
+                    csvContent +=
+                        [
+                            `"${review.listingName || "N/A"}"`,
+                            `"${review.guestName || "Anonymous"}"`,
+                            `"${review.overallRating || "N/A"}"`,
+                            `"${(review.review || "").replace(/"/g, '""')}"`,
+                            `"${
+                                review.submittedAt
+                                    ? new Date(
+                                          review.submittedAt
+                                      ).toLocaleDateString()
+                                    : "N/A"
+                            }"`,
+                            `"${review.isApproved ? "Approved" : "Pending"}"`,
+                            `"${review.channel || "N/A"}"`,
+                        ].join(",") + "\n";
+                });
+            }
+
+            // Create and download the file
+            const blob = new Blob([csvContent], {
+                type: "text/csv;charset=utf-8;",
+            });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute("href", url);
+            link.setAttribute(
+                "download",
+                `dashboard-export-${new Date().toISOString().split("T")[0]}.csv`
+            );
+            link.style.visibility = "hidden";
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            console.log("Dashboard data exported successfully");
+        } catch (error) {
+            console.error("Error exporting dashboard data:", error);
+            alert("Failed to export dashboard data. Please try again.");
+        }
+    };
+
     // Handle review approval
     const handleReviewApproval = async (
         reviewId: number,
@@ -306,10 +425,13 @@ export default function ManagerDashboard() {
                                     value={timeRange}
                                     onValueChange={setTimeRange}
                                 >
-                                    <SelectTrigger className="w-32 bg-white/10 border-white/20 text-white">
-                                        <SelectValue />
+                                    <SelectTrigger className="w-32 bg-white/10 border-white/20 text-white data-[placeholder]:text-white/70 [&_svg]:text-white [&_svg]:opacity-100 gap-1">
+                                        <SelectValue placeholder="Select period" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="all">
+                                            All time
+                                        </SelectItem>
                                         <SelectItem value="7d">
                                             Last 7 days
                                         </SelectItem>
@@ -336,7 +458,10 @@ export default function ManagerDashboard() {
                                     />
                                     Refresh
                                 </Button>
-                                <Button className="bg-white/10 hover:bg-white/20 border-white/20">
+                                <Button
+                                    className="bg-white/10 hover:bg-white/20 border-white/20"
+                                    onClick={exportDashboardData}
+                                >
                                     <Download className="h-4 w-4 mr-2" />
                                     Export
                                 </Button>
@@ -358,7 +483,7 @@ export default function ManagerDashboard() {
                                 Properties
                             </TabsTrigger>
                             <TabsTrigger value="reviews">Reviews</TabsTrigger>
-                            <TabsTrigger value="insights">Insights</TabsTrigger>
+                            <TabsTrigger value="trends">Trends</TabsTrigger>
                         </TabsList>
 
                         {/* Overview Tab */}
@@ -673,8 +798,8 @@ export default function ManagerDashboard() {
                             </div>
                         </TabsContent>
 
-                        {/* Insights Tab */}
-                        <TabsContent value="insights" className="space-y-6">
+                        {/* Trends Tab */}
+                        <TabsContent value="trends" className="space-y-6">
                             <DashboardInsights
                                 reviews={reviews}
                                 timeRange={timeRange}

@@ -1,7 +1,7 @@
 "use client";
 
 import { FlexHeader } from "@/components/flex-header";
-import { PublicReviewsSection } from "@/components/public-reviews-section";
+import { PropertyApprovedReviews } from "@/components/property-approved-reviews";
 import { PropertiesMap } from "@/components/properties-map";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -112,7 +112,10 @@ export default function PropertyPage({ params }: PropertyPageProps) {
                 const data = await response.json();
                 if (data.success) {
                     const propertyInfo = data.data;
+                    // Use the actual database slug from the API response for propertyData lookup
+                    const dbSlug = propertyInfo.slug || params.slug;
                     const configData =
+                        propertyData[dbSlug] ||
                         propertyData[params.slug] ||
                         propertyData["shoreditch-heights"];
 
@@ -561,10 +564,13 @@ export default function PropertyPage({ params }: PropertyPageProps) {
                 </div>
 
                 {/* Reviews Section */}
-                <PublicReviewsSection
-                    propertyName={property.name}
-                    maxReviews={9}
-                />
+                {property && (
+                    <PropertyApprovedReviews
+                        propertySlug={property.slug}
+                        propertyName={property.name}
+                        maxReviews={9}
+                    />
+                )}
 
                 {/* Location Section */}
                 <section className="py-16 bg-white">

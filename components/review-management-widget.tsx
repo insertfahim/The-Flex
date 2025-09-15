@@ -158,12 +158,6 @@ export function ReviewManagementWidget({
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <Link href="/dashboard/properties">
-                            <Button variant="outline" size="sm">
-                                <ArrowRight className="h-4 w-4 mr-2" />
-                                Properties
-                            </Button>
-                        </Link>
                         <Link href="/dashboard/reviews">
                             <Button variant="outline" size="sm">
                                 <Eye className="h-4 w-4 mr-2" />

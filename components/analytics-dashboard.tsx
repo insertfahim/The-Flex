@@ -72,22 +72,40 @@ export function AnalyticsDashboard({
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 font-sans">
             {/* Key Insights Summary */}
-            <Card>
+            <Card style={{ backgroundColor: "#FFFFFF" }}>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Star className="h-5 w-5 text-yellow-500" />
+                    <CardTitle
+                        className="flex items-center gap-2 font-sans"
+                        style={{ color: "#333333" }}
+                    >
+                        <Star
+                            className="h-5 w-5"
+                            style={{ color: "#284E4C" }}
+                        />
                         Key Insights
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                            <h4 className="font-medium text-green-900 mb-1">
+                        <div
+                            className="p-4 rounded-lg border"
+                            style={{
+                                backgroundColor: "#FFF9E9",
+                                borderColor: "#284E4C20",
+                            }}
+                        >
+                            <h4
+                                className="font-medium mb-1 font-sans"
+                                style={{ color: "#284E4C" }}
+                            >
                                 Overall Performance
                             </h4>
-                            <p className="text-sm text-green-700">
+                            <p
+                                className="text-sm font-sans"
+                                style={{ color: "#5C5C5A" }}
+                            >
                                 {averageRating >= 8.5
                                     ? "Excellent"
                                     : averageRating >= 7.5
@@ -98,11 +116,23 @@ export function AnalyticsDashboard({
                                 ({averageRating.toFixed(1)}/10)
                             </p>
                         </div>
-                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                            <h4 className="font-medium text-blue-900 mb-1">
+                        <div
+                            className="p-4 rounded-lg border"
+                            style={{
+                                backgroundColor: "#FFF9E9",
+                                borderColor: "#284E4C20",
+                            }}
+                        >
+                            <h4
+                                className="font-medium mb-1 font-sans"
+                                style={{ color: "#284E4C" }}
+                            >
                                 Most Common Rating
                             </h4>
-                            <p className="text-sm text-blue-700">
+                            <p
+                                className="text-sm font-sans"
+                                style={{ color: "#5C5C5A" }}
+                            >
                                 {Object.entries(ratingDistribution).sort(
                                     ([, a], [, b]) => b - a
                                 )[0]?.[0] || "N/A"}
@@ -113,11 +143,23 @@ export function AnalyticsDashboard({
                                 reviews)
                             </p>
                         </div>
-                        <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                            <h4 className="font-medium text-purple-900 mb-1">
+                        <div
+                            className="p-4 rounded-lg border"
+                            style={{
+                                backgroundColor: "#FFF9E9",
+                                borderColor: "#284E4C20",
+                            }}
+                        >
+                            <h4
+                                className="font-medium mb-1 font-sans"
+                                style={{ color: "#284E4C" }}
+                            >
                                 Top Strength
                             </h4>
-                            <p className="text-sm text-purple-700 capitalize">
+                            <p
+                                className="text-sm font-sans capitalize"
+                                style={{ color: "#5C5C5A" }}
+                            >
                                 {Object.entries(categoryAverages)
                                     .sort(([, a], [, b]) => b - a)[0]?.[0]
                                     ?.replace("_", " ") || "N/A"}
@@ -128,11 +170,23 @@ export function AnalyticsDashboard({
                                 /10)
                             </p>
                         </div>
-                        <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
-                            <h4 className="font-medium text-amber-900 mb-1">
+                        <div
+                            className="p-4 rounded-lg border"
+                            style={{
+                                backgroundColor: "#FFF9E9",
+                                borderColor: "#284E4C20",
+                            }}
+                        >
+                            <h4
+                                className="font-medium mb-1 font-sans"
+                                style={{ color: "#284E4C" }}
+                            >
                                 Primary Channel
                             </h4>
-                            <p className="text-sm text-amber-700 capitalize">
+                            <p
+                                className="text-sm font-sans capitalize"
+                                style={{ color: "#5C5C5A" }}
+                            >
                                 {Object.entries(channelBreakdown).sort(
                                     ([, a], [, b]) => b - a
                                 )[0]?.[0] || "N/A"}
@@ -153,30 +207,53 @@ export function AnalyticsDashboard({
 
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
+                        <CardTitle
+                            className="text-sm font-medium font-sans"
+                            style={{ color: "#333333" }}
+                        >
                             Total Reviews
                         </CardTitle>
-                        <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                        <MessageSquare
+                            className="h-4 w-4"
+                            style={{ color: "#5C5C5A" }}
+                        />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{totalReviews}</div>
-                        <p className="text-xs text-muted-foreground">
+                        <div
+                            className="text-2xl font-bold font-sans"
+                            style={{ color: "#284E4C" }}
+                        >
+                            {totalReviews}
+                        </div>
+                        <p
+                            className="text-xs font-sans"
+                            style={{ color: "#5C5C5A" }}
+                        >
                             Across all properties
                         </p>
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
+                        <CardTitle
+                            className="text-sm font-medium font-sans"
+                            style={{ color: "#333333" }}
+                        >
                             Average Rating
                         </CardTitle>
-                        <Star className="h-4 w-4 text-muted-foreground" />
+                        <Star
+                            className="h-4 w-4"
+                            style={{ color: "#5C5C5A" }}
+                        />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">
+                        <div
+                            className="text-2xl font-bold font-sans"
+                            style={{ color: "#284E4C" }}
+                        >
                             {averageRating.toFixed(1)}/10
                         </div>
                         <div className="flex items-center gap-1 mt-1">
@@ -185,29 +262,51 @@ export function AnalyticsDashboard({
                                     key={i}
                                     className={`h-3 w-3 ${
                                         i < Math.floor(averageRating / 2)
-                                            ? "fill-yellow-400 text-yellow-400"
+                                            ? "text-yellow-400"
                                             : "text-gray-300"
                                     }`}
+                                    style={{
+                                        fill:
+                                            i < Math.floor(averageRating / 2)
+                                                ? "#fbbf24"
+                                                : "transparent",
+                                        color:
+                                            i < Math.floor(averageRating / 2)
+                                                ? "#fbbf24"
+                                                : "#d1d5db",
+                                    }}
                                 />
                             ))}
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
+                        <CardTitle
+                            className="text-sm font-medium font-sans"
+                            style={{ color: "#333333" }}
+                        >
                             Top Channel
                         </CardTitle>
-                        <Users className="h-4 w-4 text-muted-foreground" />
+                        <Users
+                            className="h-4 w-4"
+                            style={{ color: "#5C5C5A" }}
+                        />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold capitalize">
+                        <div
+                            className="text-2xl font-bold capitalize font-sans"
+                            style={{ color: "#284E4C" }}
+                        >
                             {Object.entries(channelBreakdown).sort(
                                 ([, a], [, b]) => b - a
                             )[0]?.[0] || "N/A"}
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p
+                            className="text-xs font-sans"
+                            style={{ color: "#5C5C5A" }}
+                        >
                             {Object.entries(channelBreakdown).sort(
                                 ([, a], [, b]) => b - a
                             )[0]?.[1] || 0}{" "}
@@ -216,18 +315,30 @@ export function AnalyticsDashboard({
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">
+                        <CardTitle
+                            className="text-sm font-medium font-sans"
+                            style={{ color: "#333333" }}
+                        >
                             Issues Detected
                         </CardTitle>
-                        <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+                        <AlertTriangle
+                            className="h-4 w-4"
+                            style={{ color: "#5C5C5A" }}
+                        />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">
+                        <div
+                            className="text-2xl font-bold font-sans"
+                            style={{ color: "#284E4C" }}
+                        >
                             {commonIssues.length}
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p
+                            className="text-xs font-sans"
+                            style={{ color: "#5C5C5A" }}
+                        >
                             {
                                 commonIssues.filter(
                                     (i) => i.severity === "high"
@@ -241,10 +352,16 @@ export function AnalyticsDashboard({
 
             {/* Performance Alerts */}
             {performanceAlerts && performanceAlerts.length > 0 && (
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <AlertTriangle className="h-5 w-5 text-amber-500" />
+                        <CardTitle
+                            className="flex items-center gap-2 font-sans"
+                            style={{ color: "#333333" }}
+                        >
+                            <AlertTriangle
+                                className="h-5 w-5"
+                                style={{ color: "#284E4C" }}
+                            />
                             Performance Alerts
                         </CardTitle>
                     </CardHeader>
@@ -255,18 +372,32 @@ export function AnalyticsDashboard({
                                     key={index}
                                     className={`p-3 rounded-lg border-l-4 ${
                                         alert.priority === "high"
-                                            ? "border-red-500 bg-red-50"
+                                            ? "border-red-500"
                                             : alert.priority === "medium"
-                                            ? "border-amber-500 bg-amber-50"
-                                            : "border-blue-500 bg-blue-50"
+                                            ? "border-amber-500"
+                                            : "border-blue-500"
                                     }`}
+                                    style={{
+                                        backgroundColor:
+                                            alert.priority === "high"
+                                                ? "#fef2f2"
+                                                : alert.priority === "medium"
+                                                ? "#fffbeb"
+                                                : "#eff6ff",
+                                    }}
                                 >
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <h4 className="font-medium text-sm">
+                                            <h4
+                                                className="font-medium text-sm font-sans"
+                                                style={{ color: "#333333" }}
+                                            >
                                                 {alert.title}
                                             </h4>
-                                            <p className="text-xs text-gray-600 mt-1">
+                                            <p
+                                                className="text-xs mt-1 font-sans"
+                                                style={{ color: "#5C5C5A" }}
+                                            >
                                                 {alert.message}
                                             </p>
                                         </div>
@@ -276,7 +407,7 @@ export function AnalyticsDashboard({
                                                     ? "destructive"
                                                     : "secondary"
                                             }
-                                            className="text-xs"
+                                            className="text-xs font-sans"
                                         >
                                             {alert.priority}
                                         </Badge>
@@ -290,23 +421,52 @@ export function AnalyticsDashboard({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Rating Distribution */}
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader>
-                        <CardTitle>Rating Distribution</CardTitle>
-                        <p className="text-sm text-muted-foreground">
+                        <CardTitle
+                            className="font-sans"
+                            style={{ color: "#333333" }}
+                        >
+                            Rating Distribution
+                        </CardTitle>
+                        <p
+                            className="text-sm font-sans"
+                            style={{ color: "#5C5C5A" }}
+                        >
                             Distribution of guest ratings across 1-10 scale
                         </p>
                     </CardHeader>
                     <CardContent>
                         <ResponsiveContainer width="100%" height={300}>
                             <BarChart data={ratingChartData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="rating" />
+                                <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    stroke="#e5e7eb"
+                                />
+                                <XAxis
+                                    dataKey="rating"
+                                    style={{
+                                        fontSize: "12px",
+                                        fontFamily: "sans-serif",
+                                        fill: "#5C5C5A",
+                                    }}
+                                />
                                 <YAxis
                                     label={{
                                         value: "Number of Reviews",
                                         angle: -90,
                                         position: "insideLeft",
+                                        style: {
+                                            textAnchor: "middle",
+                                            fontSize: "12px",
+                                            fontFamily: "sans-serif",
+                                            fill: "#5C5C5A",
+                                        },
+                                    }}
+                                    style={{
+                                        fontSize: "12px",
+                                        fontFamily: "sans-serif",
+                                        fill: "#5C5C5A",
                                     }}
                                 />
                                 <Tooltip
@@ -317,10 +477,17 @@ export function AnalyticsDashboard({
                                     labelFormatter={(label) =>
                                         `Rating: ${label}`
                                     }
+                                    contentStyle={{
+                                        backgroundColor: "#FFFFFF",
+                                        border: "1px solid #e5e7eb",
+                                        borderRadius: "8px",
+                                        color: "#333333",
+                                        fontFamily: "sans-serif",
+                                    }}
                                 />
                                 <Bar
                                     dataKey="count"
-                                    fill="#374151"
+                                    fill="#284E4C"
                                     radius={[4, 4, 0, 0]}
                                 />
                             </BarChart>
@@ -329,24 +496,53 @@ export function AnalyticsDashboard({
                 </Card>
 
                 {/* Monthly Trends */}
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader>
-                        <CardTitle>Monthly Trends</CardTitle>
-                        <p className="text-sm text-muted-foreground">
+                        <CardTitle
+                            className="font-sans"
+                            style={{ color: "#333333" }}
+                        >
+                            Monthly Trends
+                        </CardTitle>
+                        <p
+                            className="text-sm font-sans"
+                            style={{ color: "#5C5C5A" }}
+                        >
                             Review volume and average ratings over time
                         </p>
                     </CardHeader>
                     <CardContent>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={monthlyTrends}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" />
+                                <CartesianGrid
+                                    strokeDasharray="3 3"
+                                    stroke="#e5e7eb"
+                                />
+                                <XAxis
+                                    dataKey="month"
+                                    style={{
+                                        fontSize: "12px",
+                                        fontFamily: "sans-serif",
+                                        fill: "#5C5C5A",
+                                    }}
+                                />
                                 <YAxis
                                     yAxisId="left"
                                     label={{
                                         value: "Review Count",
                                         angle: -90,
                                         position: "insideLeft",
+                                        style: {
+                                            textAnchor: "middle",
+                                            fontSize: "12px",
+                                            fontFamily: "sans-serif",
+                                            fill: "#5C5C5A",
+                                        },
+                                    }}
+                                    style={{
+                                        fontSize: "12px",
+                                        fontFamily: "sans-serif",
+                                        fill: "#5C5C5A",
                                     }}
                                 />
                                 <YAxis
@@ -356,6 +552,17 @@ export function AnalyticsDashboard({
                                         value: "Average Rating",
                                         angle: 90,
                                         position: "insideRight",
+                                        style: {
+                                            textAnchor: "middle",
+                                            fontSize: "12px",
+                                            fontFamily: "sans-serif",
+                                            fill: "#5C5C5A",
+                                        },
+                                    }}
+                                    style={{
+                                        fontSize: "12px",
+                                        fontFamily: "sans-serif",
+                                        fill: "#5C5C5A",
                                     }}
                                 />
                                 <Tooltip
@@ -365,20 +572,32 @@ export function AnalyticsDashboard({
                                             : `${value}/10`,
                                         name,
                                     ]}
+                                    contentStyle={{
+                                        backgroundColor: "#FFFFFF",
+                                        border: "1px solid #e5e7eb",
+                                        borderRadius: "8px",
+                                        color: "#333333",
+                                        fontFamily: "sans-serif",
+                                    }}
                                 />
                                 <Legend
                                     verticalAlign="bottom"
                                     height={36}
                                     iconType="line"
+                                    wrapperStyle={{
+                                        fontSize: "12px",
+                                        fontFamily: "sans-serif",
+                                        color: "#5C5C5A",
+                                    }}
                                 />
                                 <Line
                                     yAxisId="left"
                                     type="monotone"
                                     dataKey="count"
-                                    stroke="#374151"
+                                    stroke="#284E4C"
                                     strokeWidth={3}
                                     dot={{
-                                        fill: "#374151",
+                                        fill: "#284E4C",
                                         strokeWidth: 2,
                                         r: 4,
                                     }}
@@ -405,24 +624,36 @@ export function AnalyticsDashboard({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Category Performance */}
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader>
-                        <CardTitle>Category Performance</CardTitle>
+                        <CardTitle
+                            className="font-sans"
+                            style={{ color: "#333333" }}
+                        >
+                            Category Performance
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {categoryChartData.map((category) => (
                             <div key={category.category} className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium capitalize">
+                                    <span
+                                        className="text-sm font-medium capitalize font-sans"
+                                        style={{ color: "#333333" }}
+                                    >
                                         {category.category}
                                     </span>
-                                    <span className="text-sm text-muted-foreground">
+                                    <span
+                                        className="text-sm font-sans"
+                                        style={{ color: "#5C5C5A" }}
+                                    >
                                         {category.average}/10
                                     </span>
                                 </div>
                                 <Progress
                                     value={(category.average / 10) * 100}
                                     className="h-2"
+                                    style={{ backgroundColor: "#e5e7eb" }}
                                 />
                             </div>
                         ))}
@@ -430,32 +661,59 @@ export function AnalyticsDashboard({
                 </Card>
 
                 {/* Top Properties */}
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader>
-                        <CardTitle>Top Performing Properties</CardTitle>
+                        <CardTitle
+                            className="font-sans"
+                            style={{ color: "#333333" }}
+                        >
+                            Top Performing Properties
+                        </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {topProperties.map((property, index) => (
                             <div
                                 key={property.name}
                                 className="flex items-center justify-between p-3 rounded-lg border"
+                                style={{ borderColor: "#e5e7eb" }}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-semibold">
+                                    <div
+                                        className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold font-sans"
+                                        style={{
+                                            backgroundColor: "#FFF9E9",
+                                            color: "#284E4C",
+                                        }}
+                                    >
                                         {index + 1}
                                     </div>
                                     <div>
-                                        <p className="font-medium text-sm truncate max-w-48">
+                                        <p
+                                            className="font-medium text-sm truncate max-w-48 font-sans"
+                                            style={{ color: "#333333" }}
+                                        >
                                             {property.name}
                                         </p>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p
+                                            className="text-xs font-sans"
+                                            style={{ color: "#5C5C5A" }}
+                                        >
                                             {property.count} reviews
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-1">
-                                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                    <span className="text-sm font-semibold">
+                                    <Star
+                                        className="h-3 w-3"
+                                        style={{
+                                            fill: "#fbbf24",
+                                            color: "#fbbf24",
+                                        }}
+                                    />
+                                    <span
+                                        className="text-sm font-semibold font-sans"
+                                        style={{ color: "#284E4C" }}
+                                    >
                                         {property.averageRating.toFixed(1)}
                                     </span>
                                 </div>
@@ -467,10 +725,16 @@ export function AnalyticsDashboard({
 
             {/* Common Issues */}
             {commonIssues.length > 0 && (
-                <Card>
+                <Card style={{ backgroundColor: "#FFFFFF" }}>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <AlertTriangle className="h-5 w-5" />
+                        <CardTitle
+                            className="flex items-center gap-2 font-sans"
+                            style={{ color: "#333333" }}
+                        >
+                            <AlertTriangle
+                                className="h-5 w-5"
+                                style={{ color: "#284E4C" }}
+                            />
                             Common Issues Detected
                         </CardTitle>
                     </CardHeader>
@@ -480,9 +744,13 @@ export function AnalyticsDashboard({
                                 <div
                                     key={issue.issue}
                                     className="p-4 rounded-lg border"
+                                    style={{ borderColor: "#e5e7eb" }}
                                 >
                                     <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-medium capitalize">
+                                        <h4
+                                            className="font-medium capitalize font-sans"
+                                            style={{ color: "#333333" }}
+                                        >
                                             {issue.issue}
                                         </h4>
                                         <Badge
@@ -493,7 +761,10 @@ export function AnalyticsDashboard({
                                             {issue.severity}
                                         </Badge>
                                     </div>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p
+                                        className="text-sm font-sans"
+                                        style={{ color: "#5C5C5A" }}
+                                    >
                                         {issue.count} mentions in low-rated
                                         reviews
                                     </p>
@@ -504,6 +775,9 @@ export function AnalyticsDashboard({
                                                 100
                                             }
                                             className="h-2"
+                                            style={{
+                                                backgroundColor: "#e5e7eb",
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -514,10 +788,18 @@ export function AnalyticsDashboard({
             )}
 
             {/* Channel Breakdown */}
-            <Card>
+            <Card style={{ backgroundColor: "#FFFFFF" }}>
                 <CardHeader>
-                    <CardTitle>Review Sources & Performance</CardTitle>
-                    <p className="text-sm text-muted-foreground">
+                    <CardTitle
+                        className="font-sans"
+                        style={{ color: "#333333" }}
+                    >
+                        Review Sources & Performance
+                    </CardTitle>
+                    <p
+                        className="text-sm font-sans"
+                        style={{ color: "#5C5C5A" }}
+                    >
                         Distribution and average ratings by review channel
                     </p>
                 </CardHeader>
@@ -542,17 +824,36 @@ export function AnalyticsDashboard({
                                 return (
                                     <div
                                         key={channel}
-                                        className="text-center p-6 rounded-lg border border-gray-200 bg-gray-50"
+                                        className="text-center p-6 rounded-lg border"
+                                        style={{
+                                            borderColor: "#e5e7eb",
+                                            backgroundColor: "#FFF9E9",
+                                        }}
                                     >
-                                        <div className="text-3xl font-bold text-gray-900 mb-1">
+                                        <div
+                                            className="text-3xl font-bold mb-1 font-sans"
+                                            style={{ color: "#284E4C" }}
+                                        >
                                             {count}
                                         </div>
-                                        <div className="text-sm font-medium text-gray-700 capitalize mb-2">
+                                        <div
+                                            className="text-sm font-medium capitalize mb-2 font-sans"
+                                            style={{ color: "#333333" }}
+                                        >
                                             {channel}
                                         </div>
                                         <div className="flex items-center justify-center gap-1 mb-2">
-                                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                                            <span className="text-sm text-gray-600">
+                                            <Star
+                                                className="h-3 w-3"
+                                                style={{
+                                                    fill: "#fbbf24",
+                                                    color: "#fbbf24",
+                                                }}
+                                            />
+                                            <span
+                                                className="text-sm font-sans"
+                                                style={{ color: "#5C5C5A" }}
+                                            >
                                                 {avgRating.toFixed(1)}/10
                                             </span>
                                         </div>
@@ -560,8 +861,14 @@ export function AnalyticsDashboard({
                                             <Progress
                                                 value={percentage}
                                                 className="h-2"
+                                                style={{
+                                                    backgroundColor: "#e5e7eb",
+                                                }}
                                             />
-                                            <p className="text-xs text-gray-500 mt-1">
+                                            <p
+                                                className="text-xs mt-1 font-sans"
+                                                style={{ color: "#5C5C5A" }}
+                                            >
                                                 {percentage.toFixed(1)}% of
                                                 total
                                             </p>

@@ -16,7 +16,13 @@ export interface HostawayReview {
 export interface NormalizedReview {
     id: number;
     type: "host-to-guest" | "guest-to-host";
-    status: "published" | "pending" | "rejected";
+    status:
+        | "published"
+        | "pending"
+        | "rejected"
+        | "PUBLISHED"
+        | "PENDING"
+        | "REJECTED";
     overallRating: number;
     review: string;
     categories: {

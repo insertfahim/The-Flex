@@ -24,10 +24,18 @@ export default function AnalyticsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-white flex items-center justify-center">
+            <div
+                className="min-h-screen flex items-center justify-center font-sans"
+                style={{ backgroundColor: "#FFFDF6" }}
+            >
                 <div className="flex items-center gap-2">
-                    <Loader2 className="h-6 w-6 animate-spin" />
-                    <span>Loading analytics...</span>
+                    <Loader2
+                        className="h-6 w-6 animate-spin"
+                        style={{ color: "#284E4C" }}
+                    />
+                    <span className="font-sans" style={{ color: "#333333" }}>
+                        Loading analytics...
+                    </span>
                 </div>
             </div>
         );
@@ -35,17 +43,30 @@ export default function AnalyticsPage() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-white flex items-center justify-center">
+            <div
+                className="min-h-screen flex items-center justify-center font-sans"
+                style={{ backgroundColor: "#FFFDF6" }}
+            >
                 <Card className="max-w-md">
                     <CardContent className="pt-6">
                         <div className="text-center space-y-4">
-                            <div className="text-red-600">
+                            <div className="text-red-600 font-sans">
                                 Error loading analytics
                             </div>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                                className="text-sm font-sans"
+                                style={{ color: "#5C5C5A" }}
+                            >
                                 {error}
                             </p>
-                            <Button onClick={() => window.location.reload()}>
+                            <Button
+                                onClick={() => window.location.reload()}
+                                className="font-sans"
+                                style={{
+                                    backgroundColor: "#284E4C",
+                                    color: "#FFFDF6",
+                                }}
+                            >
                                 <RefreshCw className="h-4 w-4 mr-2" />
                                 Retry
                             </Button>
@@ -57,8 +78,11 @@ export default function AnalyticsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-white">
-            <div className="bg-white border-b">
+        <div
+            className="min-h-screen font-sans"
+            style={{ backgroundColor: "#FFFDF6" }}
+        >
+            <div className="border-b" style={{ backgroundColor: "#FFFDF6" }}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -69,10 +93,16 @@ export default function AnalyticsPage() {
                                 </Button>
                             </Link>
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-900">
+                                <h1
+                                    className="text-2xl font-bold font-sans"
+                                    style={{ color: "#333333" }}
+                                >
                                     Analytics
                                 </h1>
-                                <p className="text-gray-600 mt-1">
+                                <p
+                                    className="mt-1 font-sans"
+                                    style={{ color: "#5C5C5A" }}
+                                >
                                     Insights and trends from your guest reviews
                                 </p>
                             </div>
@@ -81,6 +111,11 @@ export default function AnalyticsPage() {
                             <Button
                                 variant="outline"
                                 onClick={() => window.location.reload()}
+                                className="font-sans"
+                                style={{
+                                    borderColor: "#284E4C",
+                                    color: "#284E4C",
+                                }}
                             >
                                 <RefreshCw className="h-4 w-4 mr-2" />
                                 Refresh
@@ -101,7 +136,10 @@ export default function AnalyticsPage() {
                     <Card>
                         <CardContent className="pt-6">
                             <div className="text-center py-8">
-                                <p className="text-muted-foreground">
+                                <p
+                                    className="font-sans"
+                                    style={{ color: "#5C5C5A" }}
+                                >
                                     No review data available for analytics.
                                 </p>
                             </div>

@@ -540,7 +540,7 @@ export default function ReviewsManagementPage() {
                                 </Link>
                             </div>
                             <div className="flex flex-wrap items-center gap-3">
-                                <Link href="/property/shoreditch-heights">
+                                <Link href="/#public-reviews">
                                     <Button
                                         variant="outline"
                                         className="border-[#284E4C]/20 text-[#5C5C5A] hover:bg-[#284E4C] hover:text-white shadow-sm hover:shadow-lg transition-all duration-200"

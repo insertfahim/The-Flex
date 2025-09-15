@@ -202,7 +202,7 @@ Access the application at [http://localhost:3000](http://localhost:3000)
 
 ### Hostaway Integration
 
-- ✅ API integration with provided credentials (Account ID: 61148)
+- ✅ API integration with provided credentials (see environment setup below)
 - ✅ Mock data implementation for development
 - ✅ Data normalization and processing
 - ✅ Error handling for API failures

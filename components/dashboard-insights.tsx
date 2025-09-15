@@ -48,9 +48,27 @@ import {
 import Link from "next/link";
 import type { NormalizedReview } from "@/types/review";
 
+interface DashboardStats {
+    totalRevenue: number;
+    revenueChange: number;
+    totalProperties: number;
+    propertiesChange: number;
+    totalReviews: number;
+    reviewsChange: number;
+    averageRating: number;
+    ratingChange: number;
+    occupancyRate: number;
+    occupancyChange: number;
+    responseRate: number;
+    responseChange: number;
+    pendingReviews: number;
+    approvedReviews: number;
+}
+
 interface DashboardInsightsProps {
     reviews: NormalizedReview[];
     timeRange: string;
+    dashboardStats?: DashboardStats;
 }
 
 interface TrendData {
@@ -105,6 +123,7 @@ interface PredictiveInsight {
 export function DashboardInsights({
     reviews,
     timeRange,
+    dashboardStats,
 }: DashboardInsightsProps) {
     const [activeInsightTab, setActiveInsightTab] = useState("trends");
 
@@ -170,25 +189,33 @@ export function DashboardInsights({
             categoryInsights,
             reviewVelocity,
             responseMetrics,
-            performanceScore,
+            performanceScore: dashboardStats
+                ? calculatePerformanceScoreFromStats(dashboardStats)
+                : calculatePerformanceScore(filteredReviews),
             kpis,
-            totalReviews: filteredReviews.length,
-            averageRating:
-                filteredReviews.length > 0
-                    ? filteredReviews.reduce(
-                          (sum, r) => sum + r.overallRating,
-                          0
-                      ) / filteredReviews.length
-                    : 0,
-            approvalRate:
-                filteredReviews.length > 0
-                    ? (filteredReviews.filter((r) => r.isApproved).length /
-                          filteredReviews.length) *
-                      100
-                    : 0,
-            pendingCount: filteredReviews.filter(
-                (r) => !r.isApproved && r.status === "pending"
-            ).length,
+            totalReviews: dashboardStats
+                ? dashboardStats.totalReviews
+                : filteredReviews.length,
+            averageRating: dashboardStats
+                ? dashboardStats.averageRating
+                : filteredReviews.length > 0
+                ? filteredReviews.reduce((sum, r) => sum + r.overallRating, 0) /
+                  filteredReviews.length
+                : 0,
+            approvalRate: dashboardStats
+                ? (dashboardStats.approvedReviews /
+                      Math.max(dashboardStats.totalReviews, 1)) *
+                  100
+                : filteredReviews.length > 0
+                ? (filteredReviews.filter((r) => r.isApproved).length /
+                      filteredReviews.length) *
+                  100
+                : 0,
+            pendingCount: dashboardStats
+                ? dashboardStats.pendingReviews
+                : filteredReviews.filter(
+                      (r) => !r.isApproved && r.status === "pending"
+                  ).length,
         };
     }, [reviews, timeRange]);
 
@@ -326,23 +353,31 @@ export function DashboardInsights({
                                 </p>
                                 <p className="text-2xl font-bold">
                                     £
-                                    {insights.kpis?.revenue?.toLocaleString() ||
+                                    {dashboardStats?.totalRevenue?.toLocaleString() ||
+                                        insights.kpis?.revenue?.toLocaleString() ||
                                         "0"}
                                 </p>
                             </div>
                             <DollarSign className="h-8 w-8 text-green-600" />
                         </div>
                         <div className="flex items-center mt-2 text-sm">
-                            <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
-                            <span className="text-green-600">
-                                +
-                                {insights.kpis?.revenue > 45230
-                                    ? Math.round(
-                                          ((insights.kpis.revenue - 45230) /
-                                              45230) *
-                                              100
-                                      )
-                                    : 0}
+                            {(dashboardStats?.revenueChange ?? 0) >= 0 ? (
+                                <TrendingUp className="h-3 w-3 text-green-600 mr-1" />
+                            ) : (
+                                <TrendingDown className="h-3 w-3 text-red-600 mr-1" />
+                            )}
+                            <span
+                                className={
+                                    (dashboardStats?.revenueChange ?? 0) >= 0
+                                        ? "text-green-600"
+                                        : "text-red-600"
+                                }
+                            >
+                                {(dashboardStats?.revenueChange ?? 0) >= 0
+                                    ? "+"
+                                    : ""}
+                                {dashboardStats?.revenueChange?.toFixed(1) ??
+                                    "0.0"}
                                 % vs last month
                             </span>
                         </div>
@@ -357,13 +392,20 @@ export function DashboardInsights({
                                     Occupancy Rate
                                 </p>
                                 <p className="text-2xl font-bold">
-                                    {insights.kpis?.occupancyRate || 0}%
+                                    {dashboardStats?.occupancyRate ??
+                                        insights.kpis?.occupancyRate ??
+                                        0}
+                                    %
                                 </p>
                             </div>
                             <Home className="h-8 w-8 text-blue-600" />
                         </div>
                         <Progress
-                            value={insights.kpis?.occupancyRate || 0}
+                            value={
+                                dashboardStats?.occupancyRate ??
+                                insights.kpis?.occupancyRate ??
+                                0
+                            }
                             className="mt-2"
                         />
                     </CardContent>
@@ -1631,6 +1673,23 @@ function calculatePerformanceScore(reviews: NormalizedReview[]): number {
 
     // Weighted performance score
     const ratingScore = (avgRating / 5) * 40; // 40% weight
+    const approvalScore = (approvalRate / 100) * 30; // 30% weight
+    const responseScore = (responseRate / 100) * 30; // 30% weight
+
+    return Math.round(ratingScore + approvalScore + responseScore);
+}
+
+function calculatePerformanceScoreFromStats(stats: DashboardStats): number {
+    // Calculate performance score from database stats
+    const avgRating = stats.averageRating;
+    const approvalRate =
+        stats.totalReviews > 0
+            ? (stats.approvedReviews / stats.totalReviews) * 100
+            : 0;
+    const responseRate = stats.responseRate;
+
+    // Weighted performance score (same weights as original function)
+    const ratingScore = (avgRating / 10) * 40; // 40% weight (assuming 10-point scale)
     const approvalScore = (approvalRate / 100) * 30; // 30% weight
     const responseScore = (responseRate / 100) * 30; // 30% weight
 

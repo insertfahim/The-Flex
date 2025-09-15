@@ -880,6 +880,7 @@ export default function ManagerDashboard() {
                                 <DashboardInsights
                                     reviews={reviews}
                                     timeRange={timeRange}
+                                    dashboardStats={dashboardStats}
                                 />
                             </div>
                         </TabsContent>

@@ -400,8 +400,7 @@ export default function ReviewsManagementPage() {
                             <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-full backdrop-blur-sm border border-[#284E4C]/10">
                                 <MessageSquare className="h-4 w-4 text-[#284E4C]" />
                                 <span className="text-sm font-medium text-[#5C5C5A]">
-                                    {filteredReviews.length} of {reviews.length}{" "}
-                                    reviews shown
+                                    {stats.pending} pending reviews
                                 </span>
                             </div>
                         </div>
